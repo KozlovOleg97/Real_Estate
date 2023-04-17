@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,13 +11,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.16" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Real_Estate.Core.Application\Real_Estate.Core.Application.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Real_Estate.Infrastructure.Identity\Real_Estate.Infrastructure.Identity.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Real_Estate.Infrastructure.Persistence\Real_Estate.Infrastructure.Persistence.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Real_Estate.Infrastructure.Shared\Real_Estate.Infrastructure.Shared.csproj" />
+    <ProjectReference Include="..\..\Core\Real_Estate.Core.Domain\Real_Estate.Core.Domain.csproj" />
   </ItemGroup>
 
 </Project>

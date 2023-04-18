@@ -63,29 +63,49 @@ namespace Real_Estate.Core.Application.Services
 
         public async Task<SavePropertiesViewModel> CustomAdd(SavePropertiesViewModel savePropertiesViewModel)
         {
+            var records = await _repository.GetAllAsync();
+            var exisCode = records.FirstOrDefault(x => 
+                x.Code == savePropertiesViewModel.Code);
+
+            if (exisCode is not null) 
+                throw new Exception("The Code Exists.");
+
             var existImprovement = await _improvementsRepository.GetByIdAsync(savePropertiesViewModel.ImprovementsId);
-            if (existImprovement is null) throw new Exception("La mejora especificada no existe.");
+            if (existImprovement is null) 
+                throw new Exception("The specified improvement doesn't exist");
 
-            var existTypeOfPropertie = await _typeOfPropertiesRepository.GetByIdAsync(savePropertiesViewModel.TypeOfPropertyId);
-            if (existTypeOfPropertie is null) throw new Exception("El tipo de propiedad especificada no existe.");
+            var existTypeOfPropertie = await _typeOfPropertiesRepository.GetByIdAsync(
+                savePropertiesViewModel.TypeOfPropertyId);
+            if (existTypeOfPropertie is null) 
+                throw new Exception("The specified property type doesn't exist.");
 
-            var existTypeOfSales = await _typeOfSalesRepository.GetByIdAsync(savePropertiesViewModel.TypeOfSaleId);
-            if (existTypeOfSales is null) throw new Exception("El tipo de venta especificada no existe.");
+            var existTypeOfSales = await _typeOfSalesRepository.GetByIdAsync(
+                savePropertiesViewModel.TypeOfSaleId);
 
-            if (savePropertiesViewModel.Price < 0) throw new Exception("El precio debe de ser mayor a 0.");
+            if (existTypeOfSales is null) throw new Exception(
+                "The specified sale type doesn't exist.");
 
-            if (savePropertiesViewModel.NumberOfBathrooms < 0) throw new Exception("El numero de baños debe de ser mayor a 0.");
+            if (savePropertiesViewModel.Price < 0) 
+                throw new Exception("The price must be greater than 0.");
 
-            if (savePropertiesViewModel.NumberOfRooms < 0) throw new Exception("El numero de habitaciones debe de ser mayor a 0.");
+            if (savePropertiesViewModel.NumberOfBathrooms < 0) 
+                throw new Exception("The number of bathrooms must be greater than 0.");
+
+            if (savePropertiesViewModel.NumberOfRooms < 0) 
+                throw new Exception("The number of rooms must be greater than 0.");
 
             var propertyEntity = _mapper.Map<Properties>(savePropertiesViewModel);
             await _repository.AddAsync(propertyEntity);
+
             return savePropertiesViewModel;
         }
 
         public async Task<List<PropertiesViewModel>> GetAllWithData()
         {
-            var result = await _repository.GetAllWithIncludeAsync(new List<string> { "Improvements", "TypeOfProperty", "TypeOfSale" });
+            var result = await _repository.GetAllWithIncludeAsync(new 
+                List<string> { "Improvements", "TypeOfProperty", "TypeOfSale" });
+
+            result.OrderByDescending(x => x.Created);
 
             return _mapper.Map<List<PropertiesViewModel>>(result);
         }
@@ -112,7 +132,7 @@ namespace Real_Estate.Core.Application.Services
             var property = properties.FirstOrDefault(x => x.Code == code);
 
             if (property is null) 
-                throw new Exception("Property Doesn't exist.");
+                throw new Exception("Property doesn't exist.");
 
             var result = await _repository.GetAllWithIncludeAsync(new 
                 List<string> { "Improvements", "TypeOfProperty", "TypeOfSale" });

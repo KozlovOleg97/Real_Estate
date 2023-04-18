@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Real_Estate.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Real_Estate.Core.Domain.Common;
 

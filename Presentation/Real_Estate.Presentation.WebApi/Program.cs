@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Real_Estate.Infrastructure.Identity.Entities;
 using Real_Estate.Infrastructure.Identity.Seeds;
 using Real_Estate.Infrastructure.Identity.Services;
+using Real_Estate.Infrastructure.Shared.Services;
 using Real_Estate.Presentation.WebApi.Extensions;
 
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
+builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerExtension();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

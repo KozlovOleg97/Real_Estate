@@ -20,7 +20,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImprovementsViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> List()
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveImprovementsViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
 
                 if (category == null)
                 {
-                    return NotFound();
+                    return NotFound("No exists improvements");
                 }
 
                 return Ok(category);
@@ -66,7 +66,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(SaveImprovementsViewModel vm)
+        public async Task<IActionResult> Create(SaveImprovementsViewModel vm)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveImprovementsViewModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveImprovementsViewModel vm)
+        public async Task<IActionResult> Update(int id, SaveImprovementsViewModel vm)
         {
             try
             {

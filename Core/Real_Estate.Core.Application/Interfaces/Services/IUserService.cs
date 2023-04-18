@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.Enums;
+using Real_Estate.Core.Application.ViewModels.Admin;
 using Real_Estate.Core.Application.ViewModels.Users;
 
 namespace Real_Estate.Core.Application.Interfaces.Services
@@ -19,5 +20,7 @@ namespace Real_Estate.Core.Application.Interfaces.Services
 		Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel forgotPasswordViewModel, 
 			string origin);
 		Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel resetPasswordViewModel);
-	}
+
+        Task<HomeAdminViewModel> GetUsersQuantity();
+    }
 }

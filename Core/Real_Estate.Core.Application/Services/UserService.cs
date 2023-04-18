@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.Enums;
 using Real_Estate.Core.Application.Interfaces.Services;
+using Real_Estate.Core.Application.ViewModels.Admin;
 using Real_Estate.Core.Application.ViewModels.Users;
 
 namespace Real_Estate.Core.Application.Services
@@ -54,5 +50,10 @@ namespace Real_Estate.Core.Application.Services
 			ResetPasswordRequest resetRequest = _mapper.Map<ResetPasswordRequest>(resetPasswordViewModel);
 			return await _accountService.ResetPasswordAsync(resetRequest);
 		}
-	}
+
+        public async Task<HomeAdminViewModel> GetUsersQuantity()
+        {
+            return await _accountService.GetUsersQuantity();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.Enums;
+using Real_Estate.Core.Application.ViewModels.Admin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Real_Estate.Core.Application.Interfaces.Services
 		Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request);
         Task<UpdateAgentUserResponse> UpdateAgentUserByUserNameAsync(UpdateAgentUserRequest request);
         Task<UpdateAgentUserResponse> GetAgentUserByUserNameAsync(string userName);
-
+        Task<HomeAdminViewModel> GetUsersQuantity();
 
     }
 }

@@ -14,6 +14,7 @@ using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.DTOs.Email;
 using Real_Estate.Core.Application.Enums;
 using Real_Estate.Core.Application.Interfaces.Services;
+using Real_Estate.Core.Application.ViewModels.Admin;
 using Real_Estate.Core.Domain.Settings;
 using Real_Estate.Infrastructure.Identity.Entities;
 
@@ -286,6 +287,69 @@ namespace Real_Estate.Infrastructure.Identity.Services
             response.Phone = user.PhoneNumber;
             response.ImagePath = user.ImagePath;
 
+            return response;
+        }
+
+        public async Task<HomeAdminViewModel> GetUsersQuantity()
+        {
+            HomeAdminViewModel response = new();
+
+            var users = _userManager.Users.ToList();
+            foreach (var user in users)
+            {
+                var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+                if (user.EmailConfirmed)
+                {
+                    if (rolesList.Contains(Roles.Agent.ToString()))
+                    {
+                        response.ActiveAgentsQuantity += 1;
+                    }
+
+                    if (rolesList.Contains(Roles.Client.ToString()))
+                    {
+                        response.ActiveClientsQuantity += 1;
+                    }
+
+                    if (rolesList.Contains(Roles.Developer.ToString()))
+                    {
+                        response.ActiveDevsQuantity += 1;
+                    }
+                }
+                else
+                {
+                    if (rolesList.Contains(Roles.Agent.ToString()))
+                    {
+                        response.UnactiveAgentsQuantity += 1;
+                    }
+
+                    if (rolesList.Contains(Roles.Client.ToString()))
+                    {
+                        response.UnactiveClientsQuantity += 1;
+                    }
+
+                    if (rolesList.Contains(Roles.Developer.ToString()))
+                    {
+                        response.UnactiveDevsQuantity += 1;
+                    }
+                }
+
+            }
+
+            return response;
+        }
+        public async Task<UserViewModel> GetAllUsersByRoles()
+        {
+            UserViewModel response = new();
+
+            var users = _userManager.Users.ToList();
+            foreach (var user in users)
+            {
+                var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+                if (user.EmailConfirmed)
+                {
+
+                }
+            }
             return response;
         }
 

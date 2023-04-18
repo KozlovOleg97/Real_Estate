@@ -4,7 +4,7 @@ using Real_Estate.Core.Application.Enums;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
-    [Authorize(Roles = "Client")]
+    //[Authorize(Roles = "Client")]
     public class ClientController : Controller
     {
         public IActionResult Index()

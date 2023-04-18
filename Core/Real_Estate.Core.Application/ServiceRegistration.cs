@@ -28,7 +28,9 @@ namespace Real_Estate.Core.Application
 
             services.AddTransient<IUserService, UserService>();
 
-			#endregion
-		}
+            services.AddTransient<IPropertiesService, PropertiesService>();
+
+            #endregion
+        }
 	}
 }

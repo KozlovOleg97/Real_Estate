@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.ViewModels.Improvements;
+using Real_Estate.Core.Application.ViewModels.Properties;
 using Real_Estate.Core.Application.ViewModels.TypeOfProperties;
 using Real_Estate.Core.Application.ViewModels.TypeOfSales;
 using Real_Estate.Core.Application.ViewModels.Users;
@@ -101,6 +102,20 @@ namespace Real_Estate.Core.Application.Mappings
                 .ForMember(x => x.CreatedBy, opt => opt.Ignore())
                 .ForMember(x => x.LastModified, opt => opt.Ignore())
                 .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
+
+            #endregion
+
+            #region Properties
+
+            // CreateMap<Properties, SavePropertiesViewModel>()
+
+            CreateMap<UpdateAgentUserRequest, SaveAgentProfileViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.UserName, opt => opt.Ignore());
+
+            CreateMap<SaveAgentProfileViewModel, UpdateAgentUserResponse>()
+                .ReverseMap()
+                .ForMember(x => x.File, opt => opt.Ignore());
 
             #endregion
         }

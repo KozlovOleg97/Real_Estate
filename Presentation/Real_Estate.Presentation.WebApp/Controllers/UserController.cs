@@ -36,7 +36,16 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 			{
 				HttpContext.Session.Set<AuthenticationResponse>("user", userViewModel);
 
-				if (userViewModel.Roles.ToString() == Roles.Client.ToString())
+                if (userViewModel.Roles.FirstOrDefault() == Roles.Client.ToString())
+                {
+					return RedirectToRoute(new
+					{
+						controller = "Client",
+						action = "Index"
+					});
+				}
+
+				else if (userViewModel.Roles.FirstOrDefault() == Roles.Agent.ToString())
 				{
 					return RedirectToRoute(new
 					{
@@ -45,17 +54,10 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 					});
 				}
 
-				else if (userViewModel.Roles.ToString() == Roles.Agent.ToString())
+				else if (userViewModel.Roles.FirstOrDefault() == Roles.Developer.ToString())
 				{
-					return RedirectToRoute(new
-					{
-						controller = "Agent",
-						action = "Index"
-					});
-				}
+					// You must say him, that he can't enter in App
 
-				else if (userViewModel.Roles.ToString() == Roles.Developer.ToString())
-				{
 					return RedirectToRoute(new
 					{
 						controller = "User",

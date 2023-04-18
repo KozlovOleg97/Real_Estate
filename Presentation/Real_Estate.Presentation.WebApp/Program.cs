@@ -5,6 +5,7 @@ using Real_Estate.Infrastructure.Identity.Seeds;
 using Real_Estate.Infrastructure.Identity.Services;
 using Real_Estate.Infrastructure.Persistence;
 using Real_Estate.Infrastructure.Shared.Services;
+using Real_Estate.Presentation.WebApp.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 builder.Services.AddApplicationLayer();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+builder.Services.AddScoped<LoginAuthorize>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<ValidateUserSession, ValidateUserSession>();
 
 var app = builder.Build();
 

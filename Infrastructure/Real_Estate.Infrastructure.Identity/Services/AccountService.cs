@@ -118,7 +118,6 @@ namespace Real_Estate.Infrastructure.Identity.Services
 				FirstName = request.FirstName,
 				LastName = request.LastName,
 				UserName = request.UserName,
-				EmailConfirmed = true,
                 ImagePath = request.ImagePath
             };
 

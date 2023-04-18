@@ -1,37 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application.Interfaces.Services;
-using Real_Estate.Core.Application.ViewModels.Improvements;
+using Real_Estate.Core.Application.ViewModels.Properties;
 
 namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
-    [ApiVersion("1.0")]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ImprovementsController : ControllerBase
+    public class PropertiesController : ControllerBase
     {
-        private readonly IImprovementsService _improvementsService;
+        private readonly IPropertiesService _propertiesService;
 
-        public ImprovementsController(IImprovementsService improvementsService)
+        public PropertiesController(IPropertiesService propertiesService)
         {
-            _improvementsService = improvementsService;
+            _propertiesService = propertiesService;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImprovementsViewModel))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PropertiesViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> List()
         {
             try
             {
-                var improvements = await _improvementsService.GetAllViewModel();
+                var properties = await _propertiesService.GetAllWithData();
 
-                if (improvements == null || improvements.Count == 0)
+                if (properties == null || properties.Count == 0)
                 {
-                    return NotFound("Not exists improvements");
+                    return NotFound("Not exist Properties.");
                 }
 
-                return Ok(improvements);
+                return Ok(properties);
             }
             catch (Exception ex)
             {
@@ -40,18 +39,41 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveImprovementsViewModel))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePropertiesViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var category = await _improvementsService.GetByIdSaveViewModel(id);
+                var category = await _propertiesService.GetByIdWithData(id);
 
                 if (category == null)
                 {
-                    return NotFound("Not exists improvements");
+                    return NotFound("Not exist Properties.");
+                }
+
+                return Ok(category);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("{code}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePropertiesViewModel))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByCode(string code)
+        {
+            try
+            {
+                var category = await _propertiesService.GetByCode(code);
+
+                if (category == null)
+                {
+                    return NotFound("Not exist Properties.");
                 }
 
                 return Ok(category);
@@ -66,7 +88,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create(SaveImprovementsViewModel vm)
+        public async Task<IActionResult> Create(SavePropertiesViewModel vm)
         {
             try
             {
@@ -75,7 +97,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
                     return BadRequest();
                 }
 
-                await _improvementsService.Add(vm);
+                await _propertiesService.CustomAdd(vm);
                 return NoContent();
             }
             catch (Exception ex)
@@ -86,10 +108,10 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
 
 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveImprovementsViewModel))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePropertiesViewModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(int id, SaveImprovementsViewModel vm)
+        public async Task<IActionResult> Update(int id, SavePropertiesViewModel vm)
         {
             try
             {
@@ -98,7 +120,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
                     return BadRequest();
                 }
 
-                await _improvementsService.Update(vm, id);
+                await _propertiesService.Update(vm, id);
                 return Ok(vm);
             }
             catch (Exception ex)
@@ -114,7 +136,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                await _improvementsService.Delete(id);
+                await _propertiesService.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

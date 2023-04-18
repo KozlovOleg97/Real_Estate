@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Real_Estate.Core.Application.Interfaces.Repositories;
 using Real_Estate.Infrastructure.Persistence.Contexts;
+using Real_Estate.Infrastructure.Persistence.Repositories;
 
 namespace Real_Estate.Infrastructure.Persistence
 {
@@ -22,10 +24,15 @@ namespace Real_Estate.Infrastructure.Persistence
 					options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
 						migration => migration.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
 			}
+
 			#endregion
 
 			#region Repositories
-			#endregion
-		}
+
+            services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepository<>));
+            services.AddTransient<IImprovementsRepository, ImprovementsRepository>();
+
+            #endregion
+        }
 	}
 }

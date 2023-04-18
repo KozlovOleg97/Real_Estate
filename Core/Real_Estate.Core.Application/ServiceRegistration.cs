@@ -16,10 +16,13 @@ namespace Real_Estate.Core.Application
 		{
 			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-			#region Services
+            #region Services
 
-			//services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
-			services.AddTransient<IUserService, UserService>();
+            services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
+
+            services.AddTransient<IImprovementsService, ImprovementsService>();
+
+            services.AddTransient<IUserService, UserService>();
 
 			#endregion
 		}

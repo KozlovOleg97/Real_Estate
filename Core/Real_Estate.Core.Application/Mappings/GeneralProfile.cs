@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Real_Estate.Core.Application.DTOs.Account;
+using Real_Estate.Core.Application.ViewModels.Improvements;
 using Real_Estate.Core.Application.ViewModels.Users;
+using Real_Estate.Core.Domain.Entities;
 
 namespace Real_Estate.Core.Application.Mappings
 {
@@ -45,7 +47,24 @@ namespace Real_Estate.Core.Application.Mappings
 					option => option.Ignore())
 				.ReverseMap();
 
-			#endregion
-		}
-	}
+            #endregion
+
+            #region ImprovementsProfile
+            CreateMap<Improvements, ImprovementsViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
+
+            CreateMap<Improvements, SaveImprovementsViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
+
+            #endregion
+        }
+    }
 }

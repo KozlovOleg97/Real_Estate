@@ -8,5 +8,8 @@ namespace Real_Estate.Core.Application.Features.TypeOfProperties.Commands.Update
 {
     public class UpdateTypeOfPropertiesResponse
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

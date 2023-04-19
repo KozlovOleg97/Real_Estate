@@ -8,6 +8,7 @@ using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.Features.Improvements.Commands.CreateImprovements;
 using Real_Estate.Core.Application.Features.Improvements.Commands.UpdateImprovements;
 using Real_Estate.Core.Application.Features.TypeOfProperties.Commands.CreateTypeOfProperties;
+using Real_Estate.Core.Application.Features.TypeOfProperties.Commands.UpdateTypeOfProperties;
 using Real_Estate.Core.Application.Features.TypeOfSales.Commands.CreateTypeOfSales;
 using Real_Estate.Core.Application.ViewModels.Improvements;
 using Real_Estate.Core.Application.ViewModels.Properties;
@@ -168,6 +169,20 @@ namespace Real_Estate.Core.Application.Mappings
                 .ReverseMap();
 
             CreateMap<UpdateImprovementsResponse, Improvements>()
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<UpdateTypeOfPropertiesCommand, TypeOfProperties>()
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<UpdateTypeOfPropertiesResponse, TypeOfProperties>()
                 .ForMember(x => x.Created, opt => opt.Ignore())
                 .ForMember(x => x.LastModified, opt => opt.Ignore())
                 .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())

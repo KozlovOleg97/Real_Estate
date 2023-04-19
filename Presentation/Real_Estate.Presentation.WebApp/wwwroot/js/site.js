@@ -11,9 +11,7 @@ console.log(sidebarBtn);
 sidebarBtn.addEventListener("click", () => {
     sidebar.classList.toggle("close");
 });
-
 let btnAddImprovement = document.querySelector("#add-improvement");
-
 btnAddImprovement.addEventListener("click", async () => {
     const { value: improvement } = await Swal.fire({
         title: "Adding Improvement",
@@ -29,7 +27,6 @@ btnAddImprovement.addEventListener("click", async () => {
             return [document.getElementById("improvement").value];
         },
     });
-
     if (improvement) {
         if (improvement.filter(Boolean).length < 1) {
             Swal.fire("Error!", "The field account number can't be empty", "error");
@@ -39,3 +36,36 @@ btnAddImprovement.addEventListener("click", async () => {
         }
     }
 });
+
+function Delete(Id, Controller, name) {
+    Swal.fire({
+        title: `Are you sure you want to delete this ${name}?`,
+        text: "Once it has been deleted it cannot be recovered.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Delete",
+        reverseButtons: true,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire("Deleted!", `${name} deleted successfully`, "success");
+
+            setTimeout(() => {
+                let form = document.createElement("form");
+                form.action = `/${Controller}/Delete`;
+                form.method = "POST";
+
+                let entityId = document.createElement("input");
+                entityId.type = "hidden";
+                entityId.name = "Id";
+                entityId.value = `${Id}`;
+
+                form.appendChild(entityId);
+
+                document.body.append(form);
+                form.submit();
+            }, 1000);
+        }
+    });
+}

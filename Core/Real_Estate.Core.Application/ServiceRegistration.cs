@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.Services;
@@ -15,6 +16,8 @@ namespace Real_Estate.Core.Application
 		public static void AddApplicationLayer(this IServiceCollection services)
 		{
 			services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             #region Services
 

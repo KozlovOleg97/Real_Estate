@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Real_Estate.Core.Application.DTOs.Account;
+using Real_Estate.Core.Application.Features.Improvements.Commands.CreateImprovements;
+using Real_Estate.Core.Application.Features.TypeOfProperties.Commands.CreateTypeOfProperties;
+using Real_Estate.Core.Application.Features.TypeOfSales.Commands.CreateTypeOfSales;
 using Real_Estate.Core.Application.ViewModels.Improvements;
 using Real_Estate.Core.Application.ViewModels.Properties;
 using Real_Estate.Core.Application.ViewModels.TypeOfProperties;
@@ -130,6 +133,31 @@ namespace Real_Estate.Core.Application.Mappings
                 .ForMember(x => x.CreatedBy, opt => opt.Ignore())
                 .ForMember(x => x.LastModified, opt => opt.Ignore())
                 .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
+
+            #endregion
+
+            #region CQRS
+
+            CreateMap<CreateImprovementsCommand, Improvements>()
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<CreateTypeOfPropertiesCommand, TypeOfProperties>()
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<CreateTypeOfSalesCommand, TypeOfSales>()
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
+                .ReverseMap();
 
             #endregion
         }

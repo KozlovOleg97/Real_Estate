@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Real_Estate.Core.Application.Features.Properties.Queries.GetAllProperties;
+using Real_Estate.Core.Application.Features.Properties.Queries.GetPropertiesById;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.Properties;
 
@@ -6,7 +8,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class PropertiesController : ControllerBase
+    public class PropertiesController : BaseApiController
     {
         private readonly IPropertiesService _propertiesService;
 
@@ -23,12 +25,8 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                var properties = await _propertiesService.GetAllWithData();
-
-                if (properties == null || properties.Count == 0)
-                {
-                    return NotFound("Not exist Properties.");
-                }
+                var properties = await Mediator.Send(
+                    new GetAllPropertiesQuery());
 
                 return Ok(properties);
             }
@@ -39,21 +37,18 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePropertiesViewModel))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PropertiesViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var category = await _propertiesService.GetByIdWithData(id);
+                var property = await Mediator.Send(
+                    new GetPropertiesByIdQuery { Id = id });
 
-                if (category == null)
-                {
-                    return NotFound("Not exist Properties.");
-                }
+                return Ok(property);
 
-                return Ok(category);
             }
             catch (Exception ex)
             {
@@ -62,82 +57,17 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         }
 
         [HttpGet("{code}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePropertiesViewModel))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PropertiesViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByCode(string code)
         {
             try
             {
-                var category = await _propertiesService.GetByCode(code);
-
-                if (category == null)
-                {
-                    return NotFound("Not exist Properties.");
-                }
-
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create(SavePropertiesViewModel vm)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-
-                await _propertiesService.CustomAdd(vm);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-
-
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePropertiesViewModel))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(int id, SavePropertiesViewModel vm)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-
-                await _propertiesService.Update(vm, id);
-                return Ok(vm);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await _propertiesService.Delete(id);
-                return NoContent();
+                var property = await Mediator.Send(
+                    new GetPropertiesByCodeQuery { Code = code });
+                
+                return Ok(property);
             }
             catch (Exception ex)
             {

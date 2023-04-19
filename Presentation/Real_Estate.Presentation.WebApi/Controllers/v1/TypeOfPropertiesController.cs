@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Real_Estate.Core.Application.Features.TypeOfProperties.Commands.CreateTypeOfProperties;
+using Real_Estate.Core.Application.Features.TypeOfProperties.Queries.GetAllTypeOfProperties;
+using Real_Estate.Core.Application.Features.TypeOfProperties.Queries.GetTypeOfPropertiesById;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.TypeOfProperties;
 
@@ -6,7 +9,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TypeOfPropertiesController : ControllerBase
+    public class TypeOfPropertiesController : BaseApiController
     {
         private readonly ITypeOfPropertiesService _typeOfPropertiesService;
 
@@ -23,12 +26,8 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                var typeOfProperties = await _typeOfPropertiesService.GetAllViewModel();
-
-                if (typeOfProperties == null || typeOfProperties.Count == 0)
-                {
-                    return NotFound("There aren't property types");
-                }
+                var typeOfProperties = await Mediator.Send(
+                    new GetAllTypeOfPropertiesQuery());
 
                 return Ok(typeOfProperties);
             }
@@ -46,7 +45,8 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                var category = await _typeOfPropertiesService.GetByIdSaveViewModel(id);
+                var category = await Mediator.Send(
+                    new GetTypeOfPropertiesByIdQuery { Id = id });
 
                 if (category == null)
                 {
@@ -65,16 +65,12 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create(SaveTypeOfPropertiesViewModel vm)
+        public async Task<IActionResult> Create(CreateTypeOfPropertiesCommand command)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
+                await Mediator.Send(command);
 
-                await _typeOfPropertiesService.Add(vm);
                 return NoContent();
             }
             catch (Exception ex)

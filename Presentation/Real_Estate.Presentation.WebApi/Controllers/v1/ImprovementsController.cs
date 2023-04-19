@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Real_Estate.Core.Application.Features.Improvements.Commands.CreateImprovements;
+using Real_Estate.Core.Application.Features.Improvements.Queries.GetAllImprovements;
+using Real_Estate.Core.Application.Features.Improvements.Queries.GetImprovementsById;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.Improvements;
 
@@ -7,7 +10,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
     [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ImprovementsController : ControllerBase
+    public class ImprovementsController : BaseApiController
     {
         private readonly IImprovementsService _improvementsService;
 
@@ -24,12 +27,8 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                var improvements = await _improvementsService.GetAllViewModel();
-
-                if (improvements == null || improvements.Count == 0)
-                {
-                    return NotFound("Not exists improvements");
-                }
+                var improvements = await Mediator.Send(
+                    new GetAllImprovementsQuery());
 
                 return Ok(improvements);
             }
@@ -47,12 +46,8 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                var category = await _improvementsService.GetByIdSaveViewModel(id);
-
-                if (category == null)
-                {
-                    return NotFound("Not exists improvements");
-                }
+                var category = await Mediator.Send(
+                    new GetImprovementsByIdQuery { Id = id });
 
                 return Ok(category);
             }
@@ -66,16 +61,12 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create(SaveImprovementsViewModel vm)
+        public async Task<IActionResult> Create(CreateImprovementsCommand command)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
+                await Mediator.Send(command);
 
-                await _improvementsService.Add(vm);
                 return NoContent();
             }
             catch (Exception ex)

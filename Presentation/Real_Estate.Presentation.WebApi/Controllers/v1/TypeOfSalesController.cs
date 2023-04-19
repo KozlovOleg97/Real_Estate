@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Real_Estate.Core.Application.Features.TypeOfProperties.Queries.GetTypeOfPropertiesById;
+using Real_Estate.Core.Application.Features.TypeOfSales.Commands.CreateTypeOfSales;
+using Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetAllTypeOfSales;
+using Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetTypeOfSalesById;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.TypeOfSales;
 
@@ -6,10 +12,9 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TypeOfSalesController : ControllerBase
+    public class TypeOfSalesController : BaseApiController
     {
         private readonly ITypeOfSalesService _typeOfSalesService;
-
         public TypeOfSalesController(ITypeOfSalesService typeOfSalesService)
         {
             _typeOfSalesService = typeOfSalesService;
@@ -23,12 +28,8 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                var typeOfProperties = await _typeOfSalesService.GetAllViewModel();
-
-                if (typeOfProperties == null || typeOfProperties.Count == 0)
-                {
-                    return NotFound("Not exists Sale of Types");
-                }
+                var typeOfProperties = await Mediator.Send(
+                    new GetAllTypeOfSalesQuery());
 
                 return Ok(typeOfProperties);
             }
@@ -37,7 +38,6 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveTypeOfSalesViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,14 +46,8 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                var category = await _typeOfSalesService.GetByIdSaveViewModel(id);
-
-                if (category == null)
-                {
-                    return NotFound("Not exists Sale of Types");
-                }
-
-                return Ok(category);
+                var typeOfSale = await Mediator.Send(new GetTypeOfSalesByIdQuery { Id = id });
+                return Ok(typeOfSale);
             }
             catch (Exception ex)
             {
@@ -65,16 +59,12 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create(SaveTypeOfSalesViewModel vm)
+        public async Task<IActionResult> Create(CreateTypeOfSalesCommand command)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
+                await Mediator.Send(command);
 
-                await _typeOfSalesService.Add(vm);
                 return NoContent();
             }
             catch (Exception ex)
@@ -82,8 +72,6 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
-
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveTypeOfSalesViewModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -96,7 +84,6 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
                 {
                     return BadRequest();
                 }
-
                 await _typeOfSalesService.Update(vm, id);
                 return Ok(vm);
             }
@@ -105,7 +92,6 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

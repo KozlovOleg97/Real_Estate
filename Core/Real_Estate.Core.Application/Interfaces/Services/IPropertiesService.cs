@@ -16,7 +16,7 @@ namespace Real_Estate.Core.Application.Interfaces.Services
         Task<List<PropertiesViewModel>> GetAllWithData();
         Task<SavePropertiesViewModel> CustomAdd(SavePropertiesViewModel savePropertiesViewModel);
         Task<SaveAgentProfileViewModel> UpdateAgentProfile(SaveAgentProfileViewModel agentProfileViewModel);
-
         Task<SaveAgentProfileViewModel> GetAgentUserByUserNameAsync(string userName);
+        Task<List<PropertiesViewModel>> GetAll();
     }
 }

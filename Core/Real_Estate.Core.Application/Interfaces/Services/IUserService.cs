@@ -20,7 +20,7 @@ namespace Real_Estate.Core.Application.Interfaces.Services
 		Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel forgotPasswordViewModel, 
 			string origin);
 		Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel resetPasswordViewModel);
-
         Task<HomeAdminViewModel> GetUsersQuantity();
+        Task<List<UserViewModel>> GetAllUsersViewModels();
     }
 }

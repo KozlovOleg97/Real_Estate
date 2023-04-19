@@ -11,7 +11,7 @@ namespace Real_Estate.Infrastructure.Identity.Entities
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
-        //public string? IDCard { get; set; }
-        public string? ImagePath { get; set; }
+		public string? IDCard { get; set; }
+		public string? ImagePath { get; set; }
 	}
 }

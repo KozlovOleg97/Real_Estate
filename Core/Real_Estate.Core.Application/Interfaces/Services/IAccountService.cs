@@ -20,6 +20,6 @@ namespace Real_Estate.Core.Application.Interfaces.Services
         Task<UpdateAgentUserResponse> UpdateAgentUserByUserNameAsync(UpdateAgentUserRequest request);
         Task<UpdateAgentUserResponse> GetAgentUserByUserNameAsync(string userName);
         Task<HomeAdminViewModel> GetUsersQuantity();
-
+        Task<List<UserViewModel>> GetAllUserViewModels();
     }
 }

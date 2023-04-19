@@ -45,12 +45,20 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
         public async Task<IActionResult> AgentsList()
         {
-            HomeAdminViewModel homeAdminViewModel = new();
-            homeAdminViewModel = await _userService.GetUsersQuantity();
-            var propertiesVM = await _propertiesService.GetAllWithData();
-            homeAdminViewModel.PropertiesQuantity = propertiesVM.Count();
+            var usersList = await _userService.GetAllUsersViewModels();
 
-            return View(homeAdminViewModel);
+            List<UserViewModel> AgentsList = usersList.Where(user => 
+                user.Role == Roles.Agent.ToString()).ToList();
+
+            List<PropertiesViewModel> propertiesList = await _propertiesService.GetAll();
+
+            foreach (UserViewModel agent in AgentsList)
+            {
+                agent.PropertiesQuantity = propertiesList.Where(property => 
+                    property.AgentId == agent.Id).Count();
+            }
+
+            return View(AgentsList);
         }
     }
 }

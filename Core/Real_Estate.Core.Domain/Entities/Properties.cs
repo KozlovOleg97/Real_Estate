@@ -10,6 +10,7 @@ namespace Real_Estate.Core.Domain.Entities
     public class Properties : OverallBaseEntity
     {
         public string Code { get; set; }
+        public string AgentId { get; set; }  
         public decimal Price { get; set; }
         public int LandSize { get; set; }
         public int NumberOfRooms { get; set; }

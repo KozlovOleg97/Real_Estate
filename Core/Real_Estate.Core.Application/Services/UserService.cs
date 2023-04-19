@@ -55,5 +55,9 @@ namespace Real_Estate.Core.Application.Services
         {
             return await _accountService.GetUsersQuantity();
         }
+        public async Task<List<UserViewModel>> GetAllUsersViewModels()
+        {
+            return await _accountService.GetAllUserViewModels();
+        }
     }
 }

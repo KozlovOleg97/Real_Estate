@@ -70,12 +70,15 @@ namespace Real_Estate.Core.Application.Services
             if (exisCode is not null) 
                 throw new Exception("The Code Exists.");
 
-            var existImprovement = await _improvementsRepository.GetByIdAsync(savePropertiesViewModel.ImprovementsId);
+            var existImprovement = await _improvementsRepository.GetByIdAsync(
+                savePropertiesViewModel.ImprovementsId);
+
             if (existImprovement is null) 
                 throw new Exception("The specified improvement doesn't exist");
 
             var existTypeOfPropertie = await _typeOfPropertiesRepository.GetByIdAsync(
                 savePropertiesViewModel.TypeOfPropertyId);
+
             if (existTypeOfPropertie is null) 
                 throw new Exception("The specified property type doesn't exist.");
 

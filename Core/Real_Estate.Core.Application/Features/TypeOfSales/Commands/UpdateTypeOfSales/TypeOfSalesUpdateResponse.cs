@@ -8,5 +8,8 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Commands.UpdateTypeO
 {
     public class TypeOfSalesUpdateResponse
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

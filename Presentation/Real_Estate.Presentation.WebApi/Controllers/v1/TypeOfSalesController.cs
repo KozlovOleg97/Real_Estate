@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application.Features.TypeOfProperties.Queries.GetTypeOfPropertiesById;
 using Real_Estate.Core.Application.Features.TypeOfSales.Commands.CreateTypeOfSales;
+using Real_Estate.Core.Application.Features.TypeOfSales.Commands.DeleteTypeOfSalesById;
+using Real_Estate.Core.Application.Features.TypeOfSales.Commands.UpdateTypeOfSales;
 using Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetAllTypeOfSales;
 using Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetTypeOfSalesById;
 using Real_Estate.Core.Application.Interfaces.Services;
@@ -76,7 +78,7 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveTypeOfSalesViewModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(int id, SaveTypeOfSalesViewModel vm)
+        public async Task<IActionResult> Update(int id, TypeOfSalesUpdateCommand command)
         {
             try
             {
@@ -84,8 +86,12 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
                 {
                     return BadRequest();
                 }
-                await _typeOfSalesService.Update(vm, id);
-                return Ok(vm);
+                if (id != command.Id)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(await Mediator.Send(command));
             }
             catch (Exception ex)
             {
@@ -99,7 +105,8 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                await _typeOfSalesService.Delete(id);
+                await Mediator.Send(new DeleteTypeOfSalesByIdCommand { Id = id });
+
                 return NoContent();
             }
             catch (Exception ex)

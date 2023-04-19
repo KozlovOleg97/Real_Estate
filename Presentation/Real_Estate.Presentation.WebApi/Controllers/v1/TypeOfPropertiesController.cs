@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application.Features.Improvements.Commands.DeleteImprovomentsById;
 using Real_Estate.Core.Application.Features.TypeOfProperties.Commands.CreateTypeOfProperties;
+using Real_Estate.Core.Application.Features.TypeOfProperties.Commands.DeleteTypeOfPropertiesById;
 using Real_Estate.Core.Application.Features.TypeOfProperties.Commands.UpdateTypeOfProperties;
 using Real_Estate.Core.Application.Features.TypeOfProperties.Queries.GetAllTypeOfProperties;
 using Real_Estate.Core.Application.Features.TypeOfProperties.Queries.GetTypeOfPropertiesById;
@@ -116,10 +117,11 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                await Mediator.Send(new DeleteImprovementsByIdCommand { Id = id });
+                await Mediator.Send(new DeleteTypeOfPropertiesByIdCommand { Id = id });
 
                 return NoContent();
             }
+
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);

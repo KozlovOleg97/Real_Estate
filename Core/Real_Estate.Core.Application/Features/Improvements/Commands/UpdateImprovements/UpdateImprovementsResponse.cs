@@ -8,5 +8,8 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.UpdateImpr
 {
     public class UpdateImprovementsResponse
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

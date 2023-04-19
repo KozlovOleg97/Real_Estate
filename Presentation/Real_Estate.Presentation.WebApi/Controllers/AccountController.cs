@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.Enums;
+using Real_Estate.Core.Application.Features.Accounts.Commands.RegisterAdminUser;
+using Real_Estate.Core.Application.Features.Accounts.Commands.RegisterDeveloperUser;
+using Real_Estate.Core.Application.Features.Accounts.Queries.Authenticate;
 using Real_Estate.Core.Application.Interfaces.Services;
 
 namespace Real_Estate.Presentation.WebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class AccountController : ControllerBase
+	public class AccountController : BaseApiController
 	{
 		private readonly IAccountService _accountService;
 
@@ -17,23 +21,25 @@ namespace Real_Estate.Presentation.WebApi.Controllers
 		}
 
 		[HttpPost("Authenticate")]
-		public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest reqest)
+		public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest request)
 		{
-			return Ok(await _accountService.AuthenticateAsync(reqest));
-		}
+            return Ok(await Mediator.Send(new AuthenticateUserQuery
+            {
+                Email = request.Email, 
+                Password = request.Password
+            }));
+        }
 
-		[HttpPost("AdminUser")]
-		public async Task<IActionResult> RegisterAdminAsync(RegisterRequest request)
+		[HttpPost("RegisterAdminUser")]
+		public async Task<IActionResult> RegisterAdminAsync(RegisterAdminUserCommand command)
 		{
-			var origin = Request.Headers["origin"];
-			return Ok(await _accountService.RegisterUserAsync(request, origin, Roles.Admin));
-		}
+            return Ok(await Mediator.Send(command));
+        }
 
 		[HttpPost("RegisterDeveloperUser")]
-		public async Task<IActionResult> RegisterDeveloperAsync(RegisterRequest request)
+		public async Task<IActionResult> RegisterDeveloperAsync(RegisterDeveloperUserCommand command)
 		{
-			var origin = Request.Headers["origin"];
-			return Ok(await _accountService.RegisterUserAsync(request, origin, Roles.Developer));
-		}
+            return Ok(await Mediator.Send(command));
+        }
 	}
 }

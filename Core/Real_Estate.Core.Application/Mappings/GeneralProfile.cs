@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Real_Estate.Core.Application.DTOs.Account;
+using Real_Estate.Core.Application.Features.Accounts.Commands.RegisterAdminUser;
+using Real_Estate.Core.Application.Features.Accounts.Commands.RegisterDeveloperUser;
+using Real_Estate.Core.Application.Features.Accounts.Queries.Authenticate;
 using Real_Estate.Core.Application.Features.Improvements.Commands.CreateImprovements;
 using Real_Estate.Core.Application.Features.Improvements.Commands.UpdateImprovements;
 using Real_Estate.Core.Application.Features.TypeOfProperties.Commands.CreateTypeOfProperties;
@@ -139,19 +142,19 @@ namespace Real_Estate.Core.Application.Mappings
                 .ReverseMap()
                 .ForMember(x => x.File, opt => opt.Ignore());
 
-            CreateMap<Properties, SavePropertiesViewModel>()
-                .ReverseMap()
-                .ForMember(x => x.Created, opt => opt.Ignore())
-                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
-                .ForMember(x => x.LastModified, opt => opt.Ignore())
-                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
-
             CreateMap<Properties, PropertiesViewModel>()
+                .ForMember(x => x.Improvements, opt => opt.Ignore())
+                .ForMember(x => x.TypeOfProperty, opt => opt.Ignore())
+                .ForMember(x => x.TypeOfSale, opt => opt.Ignore())
+                .ForMember(x => x.Improvements, opt => opt.Ignore())
                 .ReverseMap()
                 .ForMember(x => x.Created, opt => opt.Ignore())
                 .ForMember(x => x.CreatedBy, opt => opt.Ignore())
                 .ForMember(x => x.LastModified, opt => opt.Ignore())
-                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
+                .ForMember(x => x.Improvements, opt => opt.Ignore())
+                .ForMember(x => x.TypeOfProperty, opt => opt.Ignore())
+                .ForMember(x => x.TypeOfSale, opt => opt.Ignore());
 
             #endregion
 
@@ -218,6 +221,15 @@ namespace Real_Estate.Core.Application.Mappings
                 .ForMember(x => x.LastModified, opt => opt.Ignore())
                 .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
                 .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<RegisterAdminUserCommand, RegisterRequest>()
+                .ReverseMap();
+
+            CreateMap<RegisterDeveloperUserCommand, RegisterRequest>()
+                .ReverseMap();
+
+            CreateMap<AuthenticateUserQuery, AuthenticationRequest>()
                 .ReverseMap();
 
             #endregion

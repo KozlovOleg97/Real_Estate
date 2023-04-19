@@ -119,7 +119,8 @@ namespace Real_Estate.Infrastructure.Identity.Services
 				FirstName = request.FirstName,
 				LastName = request.LastName,
 				UserName = request.UserName,
-                ImagePath = request.ImagePath
+                ImagePath = request.ImagePath,
+                EmailConfirmed = request.EmailConfirmed
             };
 
 			var result = await _userManager.CreateAsync(user, request.Password);

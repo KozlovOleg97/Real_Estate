@@ -18,8 +18,11 @@ namespace Real_Estate.Core.Application.ViewModels.Users
 		[DataType(DataType.Text)]
 		public string? LastName { get; set; }
 
+        [Required(ErrorMessage = "You must type your ID Card")]
+        [DataType(DataType.Text)]
+        public string? IDCard { get; set; }
 
-		[Required(ErrorMessage = "You must type the User Name")]
+        [Required(ErrorMessage = "You must type the User Name")]
 		[DataType(DataType.Text)]
 		public string? UserName { get; set; }
 
@@ -31,8 +34,6 @@ namespace Real_Estate.Core.Application.ViewModels.Users
 		[Required(ErrorMessage = "Please, Try Again. You must enter your Password")]
 		[DataType(DataType.Password)]
 		public string? ConfirmPassword { get; set; }
-
-
 
 		[Required(ErrorMessage = "You must type the Email")]
 		[DataType(DataType.Text)]

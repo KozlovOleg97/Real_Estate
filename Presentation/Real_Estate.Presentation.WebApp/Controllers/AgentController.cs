@@ -59,6 +59,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
                 vm.Improvements = await _improvementsService.GetAllViewModel();
                 return View("SaveProperty", vm);
             }
+            vm.AgentId = userviewModel.Id;
 
             SavePropertiesViewModel savePropertiesVmAdded = await _propertiesService.CustomAdd(vm);
 
@@ -90,6 +91,11 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             return RedirectToRoute(new { controller = "Agent", action = "Index" });
 
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var vm = await _propertiesService.GetByIdWithData(id);
+            return View("SaveProperty", vm);
         }
 
         public async Task<IActionResult> MyProfile()

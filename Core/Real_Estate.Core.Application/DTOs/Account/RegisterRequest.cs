@@ -16,5 +16,6 @@ namespace Real_Estate.Core.Application.DTOs.Account
 		public string? ConfirmPassword { get; set; }
 		public string? Phone { get; set; }
 		public string? ImagePath { get; set; }
-	}
+        public bool EmailConfirmed { get; set; } = false;
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Real_Estate.Core.Application.Interfaces.Repositories;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.DeleteImpr
 {
     public class DeleteImprovementsByIdCommand : IRequest<int>
     {
+        [SwaggerParameter(Description = "The Id of the enhancement you want to remove")]
         public int Id { get; set; }
     }
 
@@ -37,8 +39,9 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.DeleteImpr
 
             var properties = await _propertiesRepository.GetAllAsync();
 
+            // change Improvements.Id on TypeOfPropertyId
             var propertiesRelational = properties.Where(x => 
-                x.ImprovementsId == command.Id).ToList();
+                x.TypeOfPropertyId == command.Id).ToList();
 
             if (propertiesRelational.Count() != 0)
             {

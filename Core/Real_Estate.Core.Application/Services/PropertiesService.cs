@@ -4,7 +4,10 @@ using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.Helpers;
 using Real_Estate.Core.Application.Interfaces.Repositories;
 using Real_Estate.Core.Application.Interfaces.Services;
+using Real_Estate.Core.Application.ViewModels.Improvements;
 using Real_Estate.Core.Application.ViewModels.Properties;
+using Real_Estate.Core.Application.ViewModels.TypeOfProperties;
+using Real_Estate.Core.Application.ViewModels.TypeOfSales;
 using Real_Estate.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -70,8 +73,9 @@ namespace Real_Estate.Core.Application.Services
             if (exisCode is not null) 
                 throw new Exception("The Code Exists.");
 
+            // Changed the Improvements ID property of savePropertiesViewModel
             var existImprovement = await _improvementsRepository.GetByIdAsync(
-                savePropertiesViewModel.ImprovementsId);
+                savePropertiesViewModel.ImprovementsId.FirstOrDefault());
 
             if (existImprovement is null) 
                 throw new Exception("The specified improvement doesn't exist");
@@ -149,6 +153,82 @@ namespace Real_Estate.Core.Application.Services
                 List<string> { "Improvements", "TypeOfProperty", "TypeOfSale" });
 
             return _mapper.Map<PropertiesViewModel>(property);
+        }
+
+        public async Task<SavePropertiesViewModel> AddWithImprovementsAsync(SavePropertiesViewModel savePropertiesViewModel)
+        {
+            var property = _mapper.Map<Properties>(savePropertiesViewModel);
+
+            List<Improvements> improvementsList = new List<Improvements>();
+
+            foreach (var item in savePropertiesViewModel.Improvements)
+            {
+                improvementsList.Add(_mapper.Map<Improvements>(item));
+            }
+
+            property = await _propertiesRepository.AddAsync(property);
+
+            property.Improvements = improvementsList;
+
+            await _propertiesRepository.AddImprovementsToProperties(property);
+
+
+            var entitySaveViewModel = _mapper.Map<SavePropertiesViewModel>(property);
+
+            List<ImprovementsViewModel> improvementsViewModelsList = new List<ImprovementsViewModel>();
+
+            foreach (var item in property.Improvements)
+            {
+                improvementsViewModelsList.Add(_mapper.Map<ImprovementsViewModel>(item));
+            }
+
+            entitySaveViewModel.Improvements = improvementsViewModelsList;
+
+            return entitySaveViewModel;
+
+        }
+        public async Task AddImprovementsAsync(SavePropertiesViewModel savePropertiesViewModel)
+        {
+            var property = _mapper.Map<Properties>(savePropertiesViewModel);
+
+            List<Improvements> improvementsList = new List<Improvements>();
+
+            foreach (var item in savePropertiesViewModel.Improvements)
+            {
+                improvementsList.Add(_mapper.Map<Improvements>(item));
+            }
+
+            property.Improvements = improvementsList;
+
+            await _propertiesRepository.AddImprovementsToProperties(property);
+
+        }
+        public async Task<List<PropertiesViewModel>> GetAllWithProperties()
+        {
+            var propertiesList = await _repository.GetAllWithIncludeAsync(
+                new List<string> { "Improvements", "TypeOfProperty", "TypeOfSale" });
+
+            propertiesList.OrderByDescending(x => x.Created);
+
+            List<PropertiesViewModel> propertiesViewModelList = new List<PropertiesViewModel>();
+
+            PropertiesViewModel properties = new PropertiesViewModel();
+
+            foreach (var property in propertiesList)
+            {
+                List<ImprovementsViewModel> improvementsViewModelsList = new List<ImprovementsViewModel>();
+
+                foreach (var improvement in property.Improvements)
+                {
+                    improvementsViewModelsList.Add(_mapper.Map<ImprovementsViewModel>(improvement));
+                }
+                properties = _mapper.Map<PropertiesViewModel>(property);
+                properties.TypeOfSale = _mapper.Map<TypeOfSalesViewModel>(property.TypeOfSale);
+                properties.TypeOfProperty = _mapper.Map<TypeOfPropertiesViewModel>(property.TypeOfProperty);
+                properties.Improvements = improvementsViewModelsList;
+                propertiesViewModelList.Add(properties);
+            }
+            return propertiesViewModelList;
         }
     }
 }

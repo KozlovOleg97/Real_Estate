@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.Helpers;
 using Real_Estate.Core.Application.Interfaces.Services;
+using Real_Estate.Core.Application.ViewModels.Improvements;
 using Real_Estate.Core.Application.ViewModels.Properties;
 using System.Runtime.CompilerServices;
 
@@ -35,9 +36,11 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             _improvementsService = improvementsService;
             _typeOfSalesService = typeOfSalesService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var properties = await _propertiesService.GetAllWithProperties();
+
+            return View(properties);
         }
         public async Task<IActionResult> Create()
         {
@@ -59,9 +62,22 @@ namespace Real_Estate.Presentation.WebApp.Controllers
                 vm.Improvements = await _improvementsService.GetAllViewModel();
                 return View("SaveProperty", vm);
             }
+            vm.TypeOfProperties = await _typeOfPropertiesService.GetAllViewModel();
+            vm.TypeOfSales = await _typeOfSalesService.GetAllViewModel();
+            vm.Improvements = await _improvementsService.GetAllViewModel();
+
             vm.AgentId = userviewModel.Id;
 
-            SavePropertiesViewModel savePropertiesVmAdded = await _propertiesService.CustomAdd(vm);
+            vm.Code = CodeGenerator.PropertyCodeGenerator();
+
+            List<ImprovementsViewModel> improvementsList = new List<ImprovementsViewModel>();
+            foreach (var item in vm.ImprovementsId)
+            {
+                improvementsList.Add(_mapper.Map<ImprovementsViewModel>(await _improvementsService.GetByIdSaveViewModel(item)));
+            }
+
+
+            SavePropertiesViewModel savePropertiesVmAdded = await _propertiesService.Add(vm);
 
             if (savePropertiesVmAdded != null && savePropertiesVmAdded.Id != 0)
             {
@@ -87,6 +103,11 @@ namespace Real_Estate.Presentation.WebApp.Controllers
                         vm.ImageFileFour, savePropertiesVmAdded.Id);
                 }
             }
+
+            savePropertiesVmAdded.Improvements = improvementsList;
+
+            await _propertiesService.AddImprovementsAsync(savePropertiesVmAdded);
+
             await _propertiesService.Update(savePropertiesVmAdded, savePropertiesVmAdded.Id);
 
             return RedirectToRoute(new { controller = "Agent", action = "Index" });

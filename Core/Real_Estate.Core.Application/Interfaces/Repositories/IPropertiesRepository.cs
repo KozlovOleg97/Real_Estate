@@ -9,6 +9,6 @@ namespace Real_Estate.Core.Application.Interfaces.Repositories
 {
     public interface IPropertiesRepository : IGenericRepositoryAsync<Properties>
     {
-
+        Task AddImprovementsToProperties(Properties property);
     }
 }

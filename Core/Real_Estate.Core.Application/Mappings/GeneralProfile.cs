@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,12 +63,14 @@ namespace Real_Estate.Core.Application.Mappings
             #endregion
 
             #region ImprovementsProfile
+
             CreateMap<Improvements, ImprovementsViewModel>()
                 .ReverseMap()
                 .ForMember(x => x.Created, opt => opt.Ignore())
                 .ForMember(x => x.CreatedBy, opt => opt.Ignore())
                 .ForMember(x => x.LastModified, opt => opt.Ignore())
-                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
+                .ForMember(x => x.Properties, opt => opt.Ignore());
 
             CreateMap<Improvements, SaveImprovementsViewModel>()
                 .ReverseMap()
@@ -75,6 +78,9 @@ namespace Real_Estate.Core.Application.Mappings
                 .ForMember(x => x.CreatedBy, opt => opt.Ignore())
                 .ForMember(x => x.LastModified, opt => opt.Ignore())
                 .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
+
+            CreateMap<ImprovementsViewModel, SaveImprovementsViewModel>()
+                .ReverseMap();
 
             #endregion
 
@@ -117,7 +123,7 @@ namespace Real_Estate.Core.Application.Mappings
             #region Properties
 
             CreateMap<Properties, SavePropertiesViewModel>()
-                .ForMember(x => x.Improvements, opt => opt.Ignore())
+                //.ForMember(x => x.Improvements, opt => opt.MapFrom(property => property.Improvements))
                 .ForMember(x => x.TypeOfProperties, opt => opt.Ignore())
                 .ForMember(x => x.TypeOfSales, opt => opt.Ignore())
                 .ForMember(x => x.Improvements, opt => opt.Ignore())

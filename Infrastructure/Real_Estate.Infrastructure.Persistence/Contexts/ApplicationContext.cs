@@ -4,38 +4,44 @@ using Real_Estate.Core.Domain.Entities;
 
 namespace Real_Estate.Infrastructure.Persistence.Contexts
 {
-	public class ApplicationContext : DbContext
-	{
-		public ApplicationContext (DbContextOptions<ApplicationContext> options) : base(options) { }
+    public class ApplicationContext : DbContext
+    {
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+        {
+        }
 
         //public DbSet<Agents>? Agent { get; set; }
         public DbSet<Properties>? Properties { get; set; }
         public DbSet<Improvements>? Improvements { get; set; }
         public DbSet<TypeOfProperties>? TypeOfProperties { get; set; }
         public DbSet<TypeOfSales>? TypeOfSales { get; set; }
+        public DbSet<PropertiesImprovements>? PropertiesImprovements { get; set; }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-		{
-			foreach (var entry in ChangeTracker.Entries<OverallBaseEntity>())
-			{
-				switch (entry.State)
-				{
-					case EntityState.Added:
-						entry.Entity.Created = DateTime.Now;
-						entry.Entity.CreatedBy = "DefaultAppUser";
-						break;
-					case EntityState.Modified:
-						entry.Entity.LastModified = DateTime.Now;
-						entry.Entity.LastModifiedBy = "DefaultAppUser";
-						break;
-				}
-			}
-			return base.SaveChangesAsync(cancellationToken);
-		}
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken =
+            new CancellationToken())
+        {
+            foreach (var entry in ChangeTracker.Entries<OverallBaseEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.Created = DateTime.Now;
+                        entry.Entity.CreatedBy = "DefaultAppUser";
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModified = DateTime.Now;
+                        entry.Entity.LastModifiedBy = "DefaultAppUser";
+                        break;
+                }
+            }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             //Fluent API
+
             #region Tables
 
             modelBuilder.Entity<Properties>().ToTable("Properties");
@@ -69,11 +75,21 @@ namespace Real_Estate.Infrastructure.Persistence.Contexts
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Properties>()
-                .HasOne(property => property.Improvements)
-                .WithMany(improvements => improvements.Properties)
-                .HasForeignKey(property => property.TypeOfPropertyId)
-                .OnDelete(DeleteBehavior.NoAction);
-
+                .HasMany(property => property.Improvements)
+                .WithMany(improvement => improvement.Properties)
+                .UsingEntity<PropertiesImprovements>(
+                    propImp => propImp.HasOne(prop => prop.Improvement)
+                        .WithMany()
+                        .HasForeignKey(prop => prop.ImprovementId),
+                    propImp => propImp.HasOne(prop => prop.Property)
+                        .WithMany()
+                        .HasForeignKey(prop => prop.PropertyId),
+                    propImp =>
+                    {
+                        propImp.Property(prop => prop.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+                        propImp.HasKey(propImp => new { propImp.PropertyId, propImp.ImprovementId });
+                    }
+                );
             #endregion
 
             #region "Property Configurations"

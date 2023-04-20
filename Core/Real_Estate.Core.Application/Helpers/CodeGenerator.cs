@@ -8,9 +8,14 @@ namespace Real_Estate.Core.Application.Helpers
 {
     public static class CodeGenerator
     {
-        public static int PropertyCodeGenerator()
+        public static string PropertyCodeGenerator()
         {
-            return 0;
+            Random randomNumber = new Random();
+
+            int number = randomNumber.Next(1, 1000000);
+            string generatedCode = number.ToString("000000");
+
+            return generatedCode;
         }
     }
 }

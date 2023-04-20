@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using MediatR;
 using Real_Estate.Core.Application.Interfaces.Repositories;
 
 namespace Real_Estate.Core.Application.Features.Improvements.Commands.UpdateImprovements
 {
+    
     public class UpdateImprovementsCommand : IRequest<UpdateImprovementsResponse>
     {
         public int Id { get; set; }

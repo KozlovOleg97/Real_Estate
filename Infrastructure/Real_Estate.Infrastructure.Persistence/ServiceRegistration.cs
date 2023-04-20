@@ -9,7 +9,8 @@ namespace Real_Estate.Infrastructure.Persistence
 {
 	public static class ServiceRegistration
 	{
-		public static void AddPersistenceInfrastructure(this IServiceCollection services, IConfiguration configuration)
+		public static void AddPersistenceInfrastructure(this IServiceCollection services, 
+            IConfiguration configuration)
 		{
 			#region Contexts
 
@@ -21,9 +22,12 @@ namespace Real_Estate.Infrastructure.Persistence
 			else
 			{
 				services.AddDbContext<ApplicationContext>(options =>
-					options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-						migration => migration.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
-			}
+                {
+                    options.EnableSensitiveDataLogging();
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                        m => m.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName));
+                });
+            }
 
 			#endregion
 

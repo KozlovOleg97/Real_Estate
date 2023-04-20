@@ -40,7 +40,7 @@ namespace Real_Estate.Core.Application.ViewModels.Properties
         public string? ImagePathOne { get; set; }
 
         [DataType(DataType.Upload)]
-        public IFormFile ImageFileOne { get; set; }
+        public IFormFile? ImageFileOne { get; set; }
         public string? ImagePathTwo { get; set; }
         [DataType(DataType.Upload)]
         public IFormFile? ImageFileTwo { get; set; }

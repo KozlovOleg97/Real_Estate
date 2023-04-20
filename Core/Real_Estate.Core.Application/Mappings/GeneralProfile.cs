@@ -124,7 +124,6 @@ namespace Real_Estate.Core.Application.Mappings
             #region Properties
 
             CreateMap<Properties, SavePropertiesViewModel>()
-                //.ForMember(x => x.Improvements, opt => opt.MapFrom(property => property.Improvements))
                 .ForMember(x => x.TypeOfProperties, opt => opt.Ignore())
                 .ForMember(x => x.TypeOfSales, opt => opt.Ignore())
                 .ForMember(x => x.Improvements, opt => opt.Ignore())
@@ -140,6 +139,9 @@ namespace Real_Estate.Core.Application.Mappings
                 .ForMember(x => x.Improvements, opt => opt.Ignore())
                 .ForMember(x => x.TypeOfProperty, opt => opt.Ignore())
                 .ForMember(x => x.TypeOfSale, opt => opt.Ignore());
+
+            CreateMap<PropertiesViewModel, SavePropertiesViewModel>()
+                .ReverseMap();
 
             CreateMap<UpdateAgentUserRequest, SaveAgentProfileViewModel>()
                 .ReverseMap()

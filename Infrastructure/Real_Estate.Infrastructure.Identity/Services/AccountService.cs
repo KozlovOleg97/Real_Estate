@@ -15,6 +15,7 @@ using Real_Estate.Core.Application.DTOs.Email;
 using Real_Estate.Core.Application.Enums;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.Admin;
+using Real_Estate.Core.Application.ViewModels.Agents;
 using Real_Estate.Core.Domain.Settings;
 using Real_Estate.Infrastructure.Identity.Entities;
 
@@ -87,7 +88,8 @@ namespace Real_Estate.Infrastructure.Identity.Services
 			return response;
 		}
 
-		public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin, Roles typeOfUser)
+		public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin, 
+            Roles typeOfUser)
 		{
 			RegisterResponse response = new()
 			{
@@ -223,7 +225,7 @@ namespace Real_Estate.Infrastructure.Identity.Services
 			if (user == null)
 			{
 				response.HasError = true;
-				response.Error = $"There is no account registered with this email '{request.Email}'";
+				response.Error = $"There is not account registered with this email '{request.Email}'";
 				return response;
 			}
 
@@ -240,7 +242,8 @@ namespace Real_Estate.Infrastructure.Identity.Services
 			return response;
 		}
 
-        public async Task<UpdateAgentUserResponse> UpdateAgentUserByUserNameAsync(UpdateAgentUserRequest request)
+        public async Task<UpdateAgentUserResponse> UpdateAgentUserByUserNameAsync(
+            UpdateAgentUserRequest request)
         {
             UpdateAgentUserResponse response = new() { HasError = false };
 
@@ -336,15 +339,78 @@ namespace Real_Estate.Infrastructure.Identity.Services
             }
             return response;
         }
+
+        public async Task<bool> ChangesStatusUser(string id, bool status)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user is null) 
+                throw new Exception("UserName doesn't exist.");
+            if (status == false)
+            {
+                user.EmailConfirmed = false;
+            }
+            else
+            {
+                user.EmailConfirmed = true;
+            }
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded) return false;
+
+            else 
+                return true;
+        }
+
+        public async Task<List<AgentsViewModel>> GetAllAgents()
+        {
+            var agents = await _userManager.GetUsersInRoleAsync("Agent");
+
+            List<AgentsViewModel> response = new();
+
+            foreach (var user in agents)
+            {
+                AgentsViewModel agent = new();
+                agent.Id = user.Id;
+                agent.FirstName = user.FirstName;
+                agent.LastName = user.LastName;
+                agent.Email = user.Email;
+                agent.Phone = user.PhoneNumber;
+                response.Add(agent);
+            }
+
+            return response;
+        }
+        public async Task<List<AgentsViewModel>> GetAllUsers()
+        {
+            List<AgentsViewModel> response = new();
+
+            var users = _userManager.Users.ToList();
+
+            foreach (var user in users)
+            {
+                AgentsViewModel agent = new();
+                agent.Id = user.Id;
+                agent.FirstName = user.FirstName;
+                agent.LastName = user.LastName;
+                agent.Email = user.Email;
+                agent.Phone = user.PhoneNumber;
+                response.Add(agent);
+            }
+            return response;
+        }
+
         public async Task<List<UserViewModel>> GetAllUserViewModels()
         {
             List<UserViewModel> response = new();
 
             var users = _userManager.Users.ToList();
+
             UserViewModel userViewModel = new UserViewModel();
+
             foreach (var user in users)
             {
                 var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+
                 if (user.EmailConfirmed)
                 {
                     if (rolesList.Contains(Roles.Agent.ToString()))
@@ -395,7 +461,6 @@ namespace Real_Estate.Infrastructure.Identity.Services
                         userViewModel.IDCard = user.IDCard;
                         userViewModel.ImagePath = user.ImagePath;
                     }
-
                     response.Append(userViewModel);
                 }
             }

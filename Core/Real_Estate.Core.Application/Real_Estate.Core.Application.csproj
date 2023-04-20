@@ -26,4 +26,9 @@
     <ProjectReference Include="..\Real_Estate.Core.Domain\Real_Estate.Core.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Agents\Commands\DeleteAgentsById\" />
+    <Folder Include="Features\Agents\Commands\UpdateAgents\" />
+  </ItemGroup>
+
 </Project>

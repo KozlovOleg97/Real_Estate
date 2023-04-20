@@ -48,15 +48,12 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
         {
             try
             {
-                var category = await Mediator.Send(
-                    new GetTypeOfPropertiesByIdQuery { Id = id });
-
-                if (category == null)
+                var typeOfProperty = await Mediator.Send(new GetTypeOfPropertiesByIdQuery
                 {
-                    return NotFound("There aren't property types");
-                }
+                    Id = id
+                });
 
-                return Ok(category);
+                return Ok(typeOfProperty);
             }
             catch (Exception ex)
             {

@@ -25,16 +25,20 @@ namespace Real_Estate.Core.Application.Features.Properties.Queries.GetProperties
             _mapper = mapper;
         }
 
-        public async Task<PropertiesViewModel> Handle(GetPropertiesByIdQuery query, CancellationToken cancellationToken)
+        public async Task<PropertiesViewModel> Handle(GetPropertiesByIdQuery query, 
+            CancellationToken cancellationToken)
         {
-            var property = await _PropertiesRepository.GetByIdAsync(query.Id);
+            var properties = await _PropertiesRepository.GetAllAsync();
+
+            var property = properties.FirstOrDefault(x => x.Id == query.Id);
 
             if (property is null) 
                 throw new Exception("Property Not Found");
 
-            var result = _mapper.Map<PropertiesViewModel>(property);
+            var result = await _PropertiesRepository.GetAllWithIncludeAsync(
+                new List<string> { "Improvements", "TypeOfProperty", "TypeOfSale" });
 
-            return result;
+            return _mapper.Map<PropertiesViewModel>(property);
         }
     }
 }

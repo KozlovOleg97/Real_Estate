@@ -2,6 +2,7 @@
 using Real_Estate.Core.Application.Enums;
 using Real_Estate.Core.Application.ViewModels.Admin;
 using Real_Estate.Core.Application.ViewModels.Agents;
+using Real_Estate.Core.Application.ViewModels.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,8 @@ namespace Real_Estate.Core.Application.Interfaces.Services
         Task<UpdateAgentUserResponse> GetAgentUserByUserNameAsync(string userName);
         Task<HomeAdminViewModel> GetUsersQuantity();
         Task<List<UserViewModel>> GetAllUserViewModels();
+        Task<UpdateAgentUserResponse> UpdateUserAsync(UpdateUserViewModel request);
+        Task<ChangeUserStatusResponse> ChageUserStatusAsync(string id);
+        Task<ChangeUserStatusResponse> DeleteUserAsync(string id);
     }
 }

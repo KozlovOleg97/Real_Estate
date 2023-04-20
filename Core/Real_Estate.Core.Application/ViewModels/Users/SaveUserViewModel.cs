@@ -18,10 +18,6 @@ namespace Real_Estate.Core.Application.ViewModels.Users
 		[DataType(DataType.Text)]
 		public string? LastName { get; set; }
 
-        [Required(ErrorMessage = "You must type your ID Card")]
-        [DataType(DataType.Text)]
-        public string? IDCard { get; set; }
-
         [Required(ErrorMessage = "You must type the User Name")]
 		[DataType(DataType.Text)]
 		public string? UserName { get; set; }
@@ -35,7 +31,10 @@ namespace Real_Estate.Core.Application.ViewModels.Users
 		[DataType(DataType.Password)]
 		public string? ConfirmPassword { get; set; }
 
-		[Required(ErrorMessage = "You must type the Email")]
+        [DataType(DataType.Password)]
+        public string? CurrentPassword { get; set; }
+
+        [Required(ErrorMessage = "You must type the Email")]
 		[DataType(DataType.Text)]
 		public string? Email { get; set; }
 
@@ -45,7 +44,11 @@ namespace Real_Estate.Core.Application.ViewModels.Users
 
 		public string? ImagePath { get; set; }
 
-		[DataType(DataType.Upload)]
+        [Required(ErrorMessage = "You must type the ID card")]
+        [DataType(DataType.Text)]
+        public string? IDCard { get; set; }
+
+        [DataType(DataType.Upload)]
 		public IFormFile? File { get; set; }
 
 		public bool HasError { get; set; }

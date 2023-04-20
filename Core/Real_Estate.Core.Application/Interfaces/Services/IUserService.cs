@@ -22,5 +22,7 @@ namespace Real_Estate.Core.Application.Interfaces.Services
 		Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel resetPasswordViewModel);
         Task<HomeAdminViewModel> GetUsersQuantity();
         Task<List<UserViewModel>> GetAllUsersViewModels();
+        Task<UpdateUserViewModel> GetUserSaveViewModelByUsername(string username);
+        Task<UpdateAgentUserResponse> Update(UpdateUserViewModel vm);
     }
 }

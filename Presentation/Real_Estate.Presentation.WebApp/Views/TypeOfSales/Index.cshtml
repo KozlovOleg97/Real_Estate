@@ -15,7 +15,7 @@
     <div class="row mx-auto">
         <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-bold mt-4 text-center text-primary">
-                <i class="bi bi-rocket-takeoff-fill">
+                <i class="bi bi-receipt">
 
                 </i> Type Of Sales</h1>
 
@@ -25,7 +25,9 @@
 
             <p class="text-center">
                 <a onclick="Create('Type Of Sale', 'TypeOfSales')" class="btn btn-info btn-lg mt-4">
-                    <i class="bi bi-rocket-takeoff-fill"></i> Add Type Of Sale</a></p>
+                    <i class="bi bi-receipt"></i> Add Type Of Sale
+                </a>
+            </p>
             </p>
         </div>
     </div>
@@ -45,7 +47,7 @@ new { @class = "text-danger text-center fw-bold fs-5 mb-3 mt-3 fs-4" })
                     <div class="card-body">
 
                         <h4 class="fw-bold mb-3 text-uppercase mt-2 fs-5">
-                            <i class="bi bi-rocket-takeoff-fill">
+                            <i class="bi bi-receipt">
 
                             </i> <i class="text-white"> @typeOfSale.Name</i></h4>
                         <p class="fs-6 text-primary fw-bold">@typeOfSale.Description </p>
@@ -61,6 +63,6 @@ new { @class = "text-danger text-center fw-bold fs-5 mb-3 mt-3 fs-4" })
     else
     {
 
-        <h5 class="fs-4 fw-bold text-secondary mt-1 text-center mb-5"><i class="bi bi-rocket-takeoff-fill"></i> No type of Sales yet</h5>
+        <h5 class="fs-4 fw-bold text-secondary mt-1 text-center mb-5"><i class="bi bi-receipt"></i> No type of Sales yet</h5>
     }
 </div>

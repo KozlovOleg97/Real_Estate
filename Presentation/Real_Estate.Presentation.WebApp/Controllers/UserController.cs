@@ -56,7 +56,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
 				else if (userViewModel.Roles.FirstOrDefault() == Roles.Developer.ToString())
 				{
-					// You must say him, that he can't enter in App
+					// You must say him, that he can't enter in Real Estate
 
 					return RedirectToRoute(new
 					{

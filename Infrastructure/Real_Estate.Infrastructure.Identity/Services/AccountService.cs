@@ -16,6 +16,7 @@ using Real_Estate.Core.Application.Enums;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.Admin;
 using Real_Estate.Core.Application.ViewModels.Agents;
+using Real_Estate.Core.Application.ViewModels.Users;
 using Real_Estate.Core.Domain.Settings;
 using Real_Estate.Infrastructure.Identity.Entities;
 
@@ -122,7 +123,7 @@ namespace Real_Estate.Infrastructure.Identity.Services
 				LastName = request.LastName,
 				UserName = request.UserName,
                 ImagePath = request.ImagePath,
-                EmailConfirmed = request.EmailConfirmed
+                IDCard = request.IDCard
             };
 
 			var result = await _userManager.CreateAsync(user, request.Password);
@@ -260,6 +261,7 @@ namespace Real_Estate.Infrastructure.Identity.Services
             user.LastName = request.LastName;
             user.PhoneNumber = request.Phone;
             user.ImagePath = request.ImagePath;
+            //user.IDCard = request.IDCard;
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -268,6 +270,50 @@ namespace Real_Estate.Infrastructure.Identity.Services
                 response.HasError = true;
                 response.Error = "An Error Ocurred While Changing The User Data";
                 return response;
+            }
+
+            return response;
+        }
+
+        public async Task<UpdateAgentUserResponse> UpdateUserAsync(UpdateUserViewModel request)
+        {
+            UpdateAgentUserResponse response = new() { HasError = false };
+
+            var user = _userManager.FindByNameAsync(request.UserName).Result;
+
+            if (user == null)
+            {
+                response.HasError = true;
+                response.Error = "User Not Found";
+                return response;
+            }
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Email = request.Email;
+            user.IDCard = request.IDCard;
+            user.UserName = request.UserName;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = "An Error Ocurred While Changing The User Data";
+                return response;
+            }
+
+            if (request.Password != null && request.ConfirmPassword != null && request.CurrentPassword != null)
+            {
+                var change = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.Password);
+
+                if (!change.Succeeded)
+                {
+                    response.HasError = true;
+                    response.Error = "Incorrect current password";
+                    return response;
+                }
+
             }
 
             return response;
@@ -405,14 +451,12 @@ namespace Real_Estate.Infrastructure.Identity.Services
 
             var users = _userManager.Users.ToList();
 
-            UserViewModel userViewModel = new UserViewModel();
-
             foreach (var user in users)
             {
+                UserViewModel userViewModel = new UserViewModel();
+
                 var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
-                if (user.EmailConfirmed)
-                {
                     if (rolesList.Contains(Roles.Agent.ToString()))
                     {
                         userViewModel.Role = Roles.Agent.ToString();
@@ -421,6 +465,7 @@ namespace Real_Estate.Infrastructure.Identity.Services
                         userViewModel.LastName = user.LastName;
                         userViewModel.UserName = user.UserName;
                         userViewModel.Email = user.Email;
+                        userViewModel.Status = user.EmailConfirmed;
                         userViewModel.IDCard = user.IDCard;
                         userViewModel.ImagePath = user.ImagePath;
 
@@ -434,6 +479,7 @@ namespace Real_Estate.Infrastructure.Identity.Services
                         userViewModel.LastName = user.LastName;
                         userViewModel.UserName = user.UserName;
                         userViewModel.Email = user.Email;
+                        userViewModel.Status = user.EmailConfirmed;
                         userViewModel.IDCard = user.IDCard;
                         userViewModel.ImagePath = user.ImagePath;
                     }
@@ -446,6 +492,7 @@ namespace Real_Estate.Infrastructure.Identity.Services
                         userViewModel.LastName = user.LastName;
                         userViewModel.UserName = user.UserName;
                         userViewModel.Email = user.Email;
+                        userViewModel.Status = user.EmailConfirmed;
                         userViewModel.IDCard = user.IDCard;
                         userViewModel.ImagePath = user.ImagePath;
                     }
@@ -458,12 +505,72 @@ namespace Real_Estate.Infrastructure.Identity.Services
                         userViewModel.LastName = user.LastName;
                         userViewModel.UserName = user.UserName;
                         userViewModel.Email = user.Email;
+                        userViewModel.Status = user.EmailConfirmed;
                         userViewModel.IDCard = user.IDCard;
                         userViewModel.ImagePath = user.ImagePath;
                     }
-                    response.Append(userViewModel);
+                    response.Add(userViewModel);
                 }
+
+            return response;
+
+        }
+        public async Task<ChangeUserStatusResponse> ChageUserStatusAsync(string id)
+        {
+            ChangeUserStatusResponse response = new() { HasError = false };
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                response.HasError = true;
+                response.Error = "User Not Found";
+                return response;
             }
+
+            if (user.EmailConfirmed)
+            {
+                user.EmailConfirmed = false;
+            }
+            else
+            {
+                user.EmailConfirmed = true;
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = "An Error Ocurred While Changing the User Status";
+                return response;
+            }
+            
+            return response;
+        }
+
+        public async Task<ChangeUserStatusResponse> DeleteUserAsync(string id)
+        {
+            ChangeUserStatusResponse response = new() { HasError = false };
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                response.HasError = true;
+                response.Error = "User Not Found";
+                return response;
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = "An Error Ocurred While Changing the User Status";
+                return response;
+            }
+
             return response;
         }
 

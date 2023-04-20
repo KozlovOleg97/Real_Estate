@@ -15,6 +15,7 @@ namespace Real_Estate.Core.Application.ViewModels.Admin
         public string UserName { get; set; }
         public string? IDCard { get; set; }
         public string? Email { get; set; }
+        public bool Status { get; set; }
         public string? ImagePath { get; set; }
         public int PropertiesQuantity { get; set; }
     }

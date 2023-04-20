@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Core.Application.Features.Properties.Queries.GetPropertiesById
 {
     public class GetPropertiesByIdQuery : IRequest<PropertiesViewModel>
     {
+        [SwaggerParameter(Description = "The Id of the property you want to consult")]
         public int Id { get; set; }
     }
     public class GetPropertiesByIdQueryHandler : IRequestHandler<GetPropertiesByIdQuery, PropertiesViewModel>

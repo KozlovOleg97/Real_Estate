@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Real_Estate.Core.Application.Interfaces.Repositories;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Core.Application.Features.TypeOfProperties.Commands.DeleteTypeOfPropertiesById
 {
     public class DeleteTypeOfPropertiesByIdCommand : IRequest<int>
     {
+        [SwaggerParameter(Description = "The ID of the type of property you want to delete")]
         public int Id { get; set; }
     }
 

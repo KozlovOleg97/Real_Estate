@@ -15,7 +15,13 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.UpdateImpr
     public class UpdateImprovementsCommand : IRequest<UpdateImprovementsResponse>
     {
         public int Id { get; set; }
+
+        [SwaggerParameter(Description = "The name of the improvement")]
+        [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; }
+
+        [SwaggerParameter(Description = "The description of the improvement")]
+        [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
     }
 

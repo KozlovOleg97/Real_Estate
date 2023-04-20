@@ -8,11 +8,13 @@ using MediatR;
 using Real_Estate.Core.Application.Interfaces.Repositories;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.Agents;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Core.Application.Features.Agents.Queries.GetAgentsById
 {
     public class GetAgentsByIdQuery : IRequest<AgentsViewModel>
     {
+        [SwaggerParameter(Description = "The Id of the agent you want to consult")]
         public string Id { get; set; }
     }
 

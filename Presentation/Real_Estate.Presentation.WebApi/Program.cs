@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application;
 using Real_Estate.Infrastructure.Identity.Entities;
 using Real_Estate.Infrastructure.Identity.Seeds;
@@ -12,12 +13,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new ProducesAttribute("application/json"));
+}).ConfigureApiBehaviorOptions(options =>
+{
+    options.SuppressInferBindingSourcesForParameters = true;
+    options.SuppressMapClientErrors = true;
+});
 builder.Services.AddSwaggerExtension();
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddApplicationLayer();
+builder.Services.AddApiVersioningExtension();
 builder.Services.AddAuthorization(opt =>
 {
     opt.AddPolicy("RequireOnlyAdminAndDeveloper", policy => 

@@ -7,11 +7,13 @@ using AutoMapper;
 using MediatR;
 using Real_Estate.Core.Application.Interfaces.Repositories;
 using Real_Estate.Core.Application.ViewModels.TypeOfSales;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetTypeOfSalesById
 {
     public class GetTypeOfSalesByIdQuery : IRequest<TypeOfSalesViewModel>
     {
+        [SwaggerParameter(Description = "The Id of the type of sale you want to consult")]
         public int Id { get; set; }
     }
 

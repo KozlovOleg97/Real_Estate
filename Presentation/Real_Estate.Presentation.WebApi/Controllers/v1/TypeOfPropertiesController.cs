@@ -12,6 +12,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
     [SwaggerTag("Supporting type of properties")]

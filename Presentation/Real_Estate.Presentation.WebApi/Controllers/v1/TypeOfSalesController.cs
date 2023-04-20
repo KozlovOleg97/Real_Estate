@@ -11,9 +11,11 @@ using Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetTypeOfSalesBy
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.TypeOfSales;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net.Mime;
 
 namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
     [SwaggerTag("Supporting of TypeSales")]
@@ -65,12 +67,20 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// Short, descriptive title of the operation
+        /// </summary>
+        /// <remarks>
+        /// More elaborate description
+        /// </remarks>
+        /// <param name="id">Here is the description for ID.</param>
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(
             Summary = "Creating of SalesType",
             Description = "Receives the necessary parameters for a new type of sale."
         )]
+        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

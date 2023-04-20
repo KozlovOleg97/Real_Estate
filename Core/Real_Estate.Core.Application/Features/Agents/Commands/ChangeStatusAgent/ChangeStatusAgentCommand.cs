@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Real_Estate.Core.Application.Interfaces.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Core.Application.Features.Agents.Commands.ChangeStatusAgent
 {
     public class ChangeStatusAgentCommand : IRequest<bool>
     {
+        [SwaggerParameter(Description = "The agent's ID")]
         public string Id { get; set; }
+
+        [SwaggerParameter(Description = "The status is changed")]
         public bool Status { get; set; }
     }
     public class ChangeStatusAgentCommandHandler : IRequestHandler<ChangeStatusAgentCommand, bool>

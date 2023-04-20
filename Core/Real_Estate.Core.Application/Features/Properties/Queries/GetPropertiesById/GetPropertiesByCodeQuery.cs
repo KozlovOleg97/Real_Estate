@@ -7,11 +7,13 @@ using AutoMapper;
 using MediatR;
 using Real_Estate.Core.Application.Interfaces.Repositories;
 using Real_Estate.Core.Application.ViewModels.Properties;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Core.Application.Features.Properties.Queries.GetPropertiesById
 {
     public class GetPropertiesByCodeQuery : IRequest<PropertiesViewModel>
     {
+        [SwaggerParameter(Description = "The code of the property that you want to consult")]
         public string Code { get; set; }
     }
 

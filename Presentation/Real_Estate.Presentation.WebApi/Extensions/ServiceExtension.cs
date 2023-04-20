@@ -28,9 +28,9 @@ namespace Real_Estate.Presentation.WebApi.Extensions
 					}
 				});
 
-				options.DescribeAllParametersInCamelCase();
-
-				options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.EnableAnnotations();
+                options.DescribeAllParametersInCamelCase();
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
 					Name = "Authorization",
 					In = ParameterLocation.Header,

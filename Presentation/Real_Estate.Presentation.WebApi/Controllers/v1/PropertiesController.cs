@@ -1,23 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application.Features.Properties.Queries.GetAllProperties;
 using Real_Estate.Core.Application.Features.Properties.Queries.GetPropertiesById;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.Properties;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [SwaggerTag("Consultations Properties")]
     public class PropertiesController : BaseApiController
     {
-        private readonly IPropertiesService _propertiesService;
-
-        public PropertiesController(IPropertiesService propertiesService)
-        {
-            _propertiesService = propertiesService;
-        }
-
+        [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet]
+        [SwaggerOperation(
+            Summary = "List of properties",
+            Description = "Get all the properties."
+        )]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PropertiesViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -36,7 +37,12 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet("{id}")]
+        [SwaggerOperation(
+            Summary = "Property by ID",
+            Description = "Get the property with using the id as a filter."
+        )]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PropertiesViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -56,7 +62,12 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet("{code}")]
+        [SwaggerOperation(
+            Summary = "Property by code",
+            Description = "Get the property with using the code as a filter."
+        )]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PropertiesViewModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

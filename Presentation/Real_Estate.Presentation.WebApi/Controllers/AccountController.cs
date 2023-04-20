@@ -6,12 +6,14 @@ using Real_Estate.Core.Application.Features.Accounts.Commands.RegisterAdminUser;
 using Real_Estate.Core.Application.Features.Accounts.Commands.RegisterDeveloperUser;
 using Real_Estate.Core.Application.Features.Accounts.Queries.Authenticate;
 using Real_Estate.Core.Application.Interfaces.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Presentation.WebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class AccountController : BaseApiController
+    [SwaggerTag("Account Services")]
+    public class AccountController : BaseApiController
 	{
 		private readonly IAccountService _accountService;
 
@@ -21,7 +23,11 @@ namespace Real_Estate.Presentation.WebApi.Controllers
 		}
 
 		[HttpPost("Authenticate")]
-		public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest request)
+        [SwaggerOperation(
+            Summary = "Login of User",
+            Description = "Gets All Properties."
+        )]
+        public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest request)
 		{
             return Ok(await Mediator.Send(new AuthenticateUserQuery
             {
@@ -31,13 +37,21 @@ namespace Real_Estate.Presentation.WebApi.Controllers
         }
 
 		[HttpPost("RegisterAdminUser")]
-		public async Task<IActionResult> RegisterAdminAsync(RegisterAdminUserCommand command)
+        [SwaggerOperation(
+            Summary = "Creating Administrator Role",
+            Description = "Receives the necessary parameters to create a user with the administrator role."
+        )]
+        public async Task<IActionResult> RegisterAdminAsync(RegisterAdminUserCommand command)
 		{
             return Ok(await Mediator.Send(command));
         }
 
 		[HttpPost("RegisterDeveloperUser")]
-		public async Task<IActionResult> RegisterDeveloperAsync(RegisterDeveloperUserCommand command)
+        [SwaggerOperation(
+            Summary = "Creating Developer Role",
+            Description = "Receives the necessary parameters to create a user with the developer role."
+        )]
+        public async Task<IActionResult> RegisterDeveloperAsync(RegisterDeveloperUserCommand command)
 		{
             return Ok(await Mediator.Send(command));
         }

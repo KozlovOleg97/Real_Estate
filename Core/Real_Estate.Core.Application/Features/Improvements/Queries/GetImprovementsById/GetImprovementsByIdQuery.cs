@@ -32,8 +32,12 @@ namespace Real_Estate.Core.Application.Features.Improvements.Queries.GetImprovem
             CancellationToken cancellationToken)
         {
             var improvement = await _ImprovementsRepository.GetByIdAsync(query.Id);
-            if (improvement is null) throw new Exception("Improvement Not Found");
+
+            if (improvement is null) 
+                throw new Exception("Improvement Not Found");
+
             var result = _mapper.Map<ImprovementsViewModel>(improvement);
+
             return result;
         }
     }

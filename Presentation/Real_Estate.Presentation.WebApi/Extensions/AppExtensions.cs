@@ -1,4 +1,6 @@
-﻿namespace Real_Estate.Presentation.WebApi.Extensions
+﻿using Swashbuckle.AspNetCore.SwaggerUI;
+
+namespace Real_Estate.Presentation.WebApi.Extensions
 {
 	public static class AppExtensions
 	{
@@ -8,7 +10,9 @@
 			app.UseSwaggerUI(options =>
 			{
 				options.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurant Api");
-			});
+
+                options.DefaultModelRendering(ModelRendering.Model);
+            });
 		}
 	}
 }

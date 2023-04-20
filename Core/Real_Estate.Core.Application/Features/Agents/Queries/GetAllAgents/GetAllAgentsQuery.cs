@@ -33,6 +33,9 @@ namespace Real_Estate.Core.Application.Features.Agents.Queries.GetAllAgents
         {
             var agents = await _accountService.GetAllAgents();
 
+            if (agents.Count() == 0) 
+                throw new Exception("The Property doesn't exist.");
+
             var properties = await _propertiesRepository.GetAllAsync();
 
             foreach (var agent in agents)

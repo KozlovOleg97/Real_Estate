@@ -16,14 +16,17 @@ namespace Real_Estate.Core.Application.Features.Improvements.Queries.GetAllImpro
             IEnumerable<ImprovementsViewModel>>
         {
             private readonly IImprovementsRepository _ImprovementsRepository;
+
             private readonly IMapper _mapper;
-            public GetAllCategoriesQueryHandler(IImprovementsRepository ImprovementsRepository, IMapper mapper)
+            public GetAllCategoriesQueryHandler(IImprovementsRepository ImprovementsRepository, 
+                IMapper mapper)
             {
                 _ImprovementsRepository = ImprovementsRepository;
                 _mapper = mapper;
             }
 
-            public async Task<IEnumerable<ImprovementsViewModel>> Handle(GetAllImprovementsQuery request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<ImprovementsViewModel>> Handle(GetAllImprovementsQuery request, 
+                CancellationToken cancellationToken)
             {
                 var ImprovementsViewModel = await GetAllViewModel();
                 return ImprovementsViewModel;
@@ -32,8 +35,12 @@ namespace Real_Estate.Core.Application.Features.Improvements.Queries.GetAllImpro
             private async Task<List<ImprovementsViewModel>> GetAllViewModel()
             {
                 var ImprovementList = await _ImprovementsRepository.GetAllAsync();
-                if (ImprovementList.Count() == 0) throw new Exception("There are no improvements.");
+
+                if (ImprovementList.Count() == 0) 
+                    throw new Exception("There are not improvements.");
+
                 var result = _mapper.Map<List<ImprovementsViewModel>>(ImprovementList);
+
                 return result;
             }
         }

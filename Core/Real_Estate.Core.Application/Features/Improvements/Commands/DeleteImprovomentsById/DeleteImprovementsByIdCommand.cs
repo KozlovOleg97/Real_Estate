@@ -18,17 +18,35 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.DeleteImpr
     {
         private readonly IImprovementsRepository _improvementsRepository;
 
-        public DeleteImprovementsByIdCommandHandler(IImprovementsRepository improvementsRepository)
+        private readonly IPropertiesRepository _propertiesRepository;
+
+        public DeleteImprovementsByIdCommandHandler(IImprovementsRepository improvementsRepository, 
+            IPropertiesRepository propertiesRepository)
         {
             _improvementsRepository = improvementsRepository;
+            _propertiesRepository = propertiesRepository;
         }
 
-        public async Task<int> Handle(DeleteImprovementsByIdCommand command, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteImprovementsByIdCommand command, 
+            CancellationToken cancellationToken)
         {
             var improvements = await _improvementsRepository.GetByIdAsync(command.Id);
 
             if (improvements == null)
                 throw new Exception("Improvements Not Found.");
+
+            var properties = await _propertiesRepository.GetAllAsync();
+
+            var propertiesRelational = properties.Where(x => 
+                x.ImprovementsId == command.Id).ToList();
+
+            if (propertiesRelational.Count() != 0)
+            {
+                foreach (var property in propertiesRelational)
+                {
+                    await _propertiesRepository.DeleteAsync(property);
+                }
+            }
 
             await _improvementsRepository.DeleteAsync(improvements);
 

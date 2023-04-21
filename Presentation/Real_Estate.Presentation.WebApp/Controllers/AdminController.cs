@@ -10,6 +10,8 @@ using Real_Estate.Core.Application.Services;
 using Real_Estate.Core.Application.ViewModels.Admin;
 using Real_Estate.Core.Application.ViewModels.Properties;
 using Real_Estate.Core.Application.ViewModels.Users;
+using Real_Estate.Core.Application.ViewModels.Improvements;
+using System.Data;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
@@ -23,8 +25,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         private readonly AuthenticationResponse currentlyUser;
         private readonly IMapper _mapper;
 
-        public AdminController(IUserService userService, IPropertiesService propertiesService, IAccountService accountService, 
-            IHttpContextAccessor httpContextAccessor, IMapper mapper)
+        public AdminController(IUserService userService, IPropertiesService propertiesService, 
+            IAccountService accountService, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
             _propertiesService = propertiesService;
             _accountService = accountService;
@@ -65,7 +67,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         public async Task<IActionResult> AdminManager()
         {
             var usersList = await _userService.GetAllUsersViewModels();
-            List<UserViewModel> adminList = usersList.Where(user => user.Role == Roles.Admin.ToString()).ToList();
+            List<UserViewModel> adminList = usersList.Where(
+                user => user.Role == Roles.Admin.ToString()).ToList();
 
             return View(adminList);
         }
@@ -73,7 +76,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         public async Task<IActionResult> DevsManager()
         {
             var usersList = await _userService.GetAllUsersViewModels();
-            List<UserViewModel> adminList = usersList.Where(user => user.Role == Roles.Developer.ToString()).ToList();
+            List<UserViewModel> adminList = usersList.Where(
+                user => user.Role == Roles.Developer.ToString()).ToList();
 
             return View(adminList);
         }
@@ -207,7 +211,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeUserStatus(string id, string Role)
         {
-            var response = await _accountService.ChageUserStatusAsync(id);
+            var response = await _accountService.ChangeUserStatusAsync(id);
 
             if (Role == "Developer")
             {

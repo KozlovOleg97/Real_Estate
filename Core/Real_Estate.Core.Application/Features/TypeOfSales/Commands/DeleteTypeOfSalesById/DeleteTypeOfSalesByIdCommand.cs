@@ -37,7 +37,7 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Commands.DeleteTypeO
             var properties = await _propertiesRepository.GetAllAsync();
 
             //change Improvements.Id on TypeOfPropertyId
-            var propertiesRelational = properties.Where(x => x.TypeOfPropertyId == command.Id).ToList();
+            var propertiesRelational = properties.Where(x => x.TypeOfSaleId == command.Id).ToList();
 
             if (propertiesRelational.Count() != 0)
             {

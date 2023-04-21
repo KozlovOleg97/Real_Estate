@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using MediatR;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.DTOs.Email;
+using Real_Estate.Core.Application.DTOs.Properties;
 using Real_Estate.Core.Application.Enums;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.Admin;
@@ -516,7 +518,7 @@ namespace Real_Estate.Infrastructure.Identity.Services
             return response;
 
         }
-        public async Task<ChangeUserStatusResponse> ChageUserStatusAsync(string id)
+        public async Task<ChangeUserStatusResponse> ChangeUserStatusAsync(string id)
         {
             ChangeUserStatusResponse response = new() { HasError = false };
 
@@ -573,6 +575,27 @@ namespace Real_Estate.Infrastructure.Identity.Services
             }
 
             return response;
+        }
+
+        public async Task<AgentProperty> GetAgentPropertyByIdAsync(string id)
+        {
+            var user = _userManager.FindByIdAsync(id).Result;
+            AgentProperty agentProperty = new AgentProperty();
+
+            if (user != null)
+            {
+                agentProperty.Id = user.Id;
+                agentProperty.FirstName = user.FirstName;
+                agentProperty.LastName = user.LastName;
+                agentProperty.UserName = user.UserName;
+                agentProperty.IDCard = user.IDCard;
+                agentProperty.Email = user.Email;
+                agentProperty.Phone = user.PhoneNumber;
+                agentProperty.ImagePath = user.ImagePath;
+            }
+
+            return agentProperty;
+
         }
 
         #region "Private Methods"

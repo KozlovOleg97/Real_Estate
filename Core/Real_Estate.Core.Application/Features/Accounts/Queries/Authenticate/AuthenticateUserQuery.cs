@@ -16,7 +16,7 @@ namespace Real_Estate.Core.Application.Features.Accounts.Queries.Authenticate
         [Required(ErrorMessage = "Email is required.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password s required.")]
+        [Required(ErrorMessage = "Password is required.")]
         public string Password { get; set; }
     }
 

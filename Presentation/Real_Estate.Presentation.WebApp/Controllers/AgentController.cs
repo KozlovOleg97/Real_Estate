@@ -118,7 +118,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             await _propertiesService.Update(savePropertiesVmAdded, savePropertiesVmAdded.Id);
 
-            return RedirectToRoute(new { controller = "Agent", action = "Index" });
+            return RedirectToRoute(new { controller = "Agent", action = "GetAll" });
 
         }
         public async Task<IActionResult> Edit(int id)
@@ -214,7 +214,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             savePropertiesVmToUpdate.ImprovementsId = vm.ImprovementsId;
 
             await _propertiesService.UpdatePropertyWithImprovementsAsync(savePropertiesVmToUpdate, savePropertiesVmToUpdate.Id);
-            return RedirectToRoute(new { controller = "Agent", action = "Index" });
+            return RedirectToRoute(new { controller = "Agent", action = "GetAll" });
 
         }
 
@@ -228,7 +228,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         {
             await _propertiesService.Delete(id);
             UploadImagesHelper.DeletePropertyImage(id);
-            return RedirectToRoute(new { controller = "Agent", action = "Index" });
+            return RedirectToRoute(new { controller = "Agent", action = "GetAll" });
         }
 
         public async Task<IActionResult> MyProfile()

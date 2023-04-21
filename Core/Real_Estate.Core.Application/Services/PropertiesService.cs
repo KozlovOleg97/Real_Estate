@@ -23,7 +23,7 @@ namespace Real_Estate.Core.Application.Services
         private readonly IGenericRepositoryAsync<Properties> _repository;
         private readonly IPropertiesRepository _propertiesRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        //private readonly AuthenticationResponse userviewModel;
+        private readonly AuthenticationResponse userviewModel;
         private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
         private readonly IImprovementsRepository _improvementsRepository;
@@ -44,14 +44,14 @@ namespace Real_Estate.Core.Application.Services
             _improvementsRepository = improvementsRepository;
             _typeOfPropertiesRepository = typeOfPropertiesRepository;
             _typeOfSalesRepository = typeOfSalesRepository;
-            //userviewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+            userviewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
             _accountService = accountService;
         }
 
         public async Task<SaveAgentProfileViewModel> UpdateAgentProfile(SaveAgentProfileViewModel agentProfileViewModel)
         {
             var agentProfileToUpdate = _mapper.Map<UpdateAgentUserRequest>(agentProfileViewModel);
-            //agentProfileToUpdate.UserName = userviewModel.UserName;
+            agentProfileToUpdate.UserName = userviewModel.UserName;
 
 
             var response = await _accountService.UpdateAgentUserByUserNameAsync(agentProfileToUpdate);
@@ -289,6 +289,31 @@ namespace Real_Estate.Core.Application.Services
 
             property.Improvements = improvementsList;
             await _propertiesRepository.UpdateAsync(property, id);
+        }
+
+        public async Task<PropertyDetailsViewModel> GetPropertyDetailsAsync(int propertyId)
+        {
+            var propertiesList = await GetAllWithInclude();
+            PropertiesViewModel property = new PropertiesViewModel();
+
+            foreach (var item in propertiesList)
+            {
+                if (propertyId == item.Id)
+                {
+                    property = _mapper.Map<PropertiesViewModel>(item);
+                }
+            }
+
+            var agentProperty = await _accountService.GetAgentPropertyByIdAsync(property.AgentId);
+
+            PropertyDetailsViewModel propertyDetailsViewModel = _mapper.Map<PropertyDetailsViewModel>(property);
+
+            propertyDetailsViewModel.AgentName = agentProperty.FirstName + " " + agentProperty.LastName;
+            propertyDetailsViewModel.AgentPhoneNumber = agentProperty.Phone;
+            propertyDetailsViewModel.AgentImagePath = agentProperty.ImagePath;
+            propertyDetailsViewModel.AgentEmail = agentProperty.Email;
+
+            return propertyDetailsViewModel;
         }
     }
 }

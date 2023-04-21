@@ -43,7 +43,8 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.DeleteImpr
 
             var properties = await _propertiesRepository.GetAllAsync();
 
-            var improvementList = improvementsProperties.Where(x => x.ImprovementId == command.Id);
+            var improvementList = improvementsProperties.Where(
+                x => x.ImprovementId == command.Id);
 
             foreach (var improvement in improvementList)
             {

@@ -288,7 +288,11 @@ namespace Real_Estate.Core.Application.Services
             }
 
             property.Improvements = improvementsList;
+
             await _propertiesRepository.UpdateAsync(property, id);
+
+            await _propertiesRepository.UpdateImprovementsToProperties(property);
+
         }
 
         public async Task<PropertyDetailsViewModel> GetPropertyDetailsAsync(int propertyId)

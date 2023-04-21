@@ -127,7 +127,30 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             vm.TypeOfProperties = await _typeOfPropertiesService.GetAllViewModel();
             vm.TypeOfSales = await _typeOfSalesService.GetAllViewModel();
-            ViewBag.AllImprovements = await _improvementsService.GetAllViewModel();
+           
+
+            var allImprovements = await _improvementsService.GetAllViewModel();
+
+            List<ImprovementsViewModel> allImprovementsList = new List<ImprovementsViewModel>();
+
+            foreach (var item in allImprovements)
+            {
+                foreach (var item2 in vm.Improvements)
+                {
+                    if (item2.Id == item.Id)
+                    {
+                        item.IsChecked = true;
+                        allImprovementsList.Add(item);
+                    }
+                    else
+                    {
+                        allImprovementsList.Add(item);
+
+                    }
+                }
+            }
+
+            ViewBag.AllImprovements = allImprovementsList.Distinct().ToList();
 
             return View("SaveProperty", vm);
         }
@@ -137,9 +160,31 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vm.TypeOfProperties = await _typeOfPropertiesService.GetAllViewModel();
-                vm.TypeOfSales = await _typeOfSalesService.GetAllViewModel();
-                return View("SaveProperty", vm);
+                var saveviewModel = await _propertiesService.GetByIdWithInclude(vm.Id);
+                saveviewModel.TypeOfProperties = await _typeOfPropertiesService.GetAllViewModel();
+                saveviewModel.TypeOfSales = await _typeOfSalesService.GetAllViewModel();
+                var allImprovements = await _improvementsService.GetAllViewModel();
+                List<ImprovementsViewModel> allImprovementsList = new List<ImprovementsViewModel>();
+
+                foreach (var item in allImprovements)
+                {
+                    foreach (var item2 in saveviewModel.Improvements)
+                    {
+                        if (item2.Id == item.Id)
+                        {
+                            item.IsChecked = true;
+                            allImprovementsList.Add(item);
+                        }
+
+                        else
+                        {
+                            allImprovementsList.Add(item);
+                        }
+                    }
+                }
+                ViewBag.AllImprovements = allImprovementsList.Distinct().ToList();
+
+                return View("SaveProperty", saveviewModel);
 
             }
 

@@ -3,8 +3,11 @@
 @using Real_Estate.Core.Application.ViewModels.TypeOfSales
 @using Real_Estate.Core.Application.ViewModels.Improvements
 @model SavePropertiesViewModel
+
 @{
     bool editMode = Model.Id == 0 ? false : true;
+    bool isSelected = false;
+
     ViewData["Title"] = "Save Property";
 }
 
@@ -33,6 +36,8 @@
 
                     @if (Model.TypeOfProperties.Count != 0 && Model.TypeOfSales.Count != 0 && Model.Improvements.Count != 0)
                     {
+                        @Html.ValidationSummary(false, "", new {@class = "text-danger"})
+
                         <form method="post" asp-controller="Agent" asp-action="@(editMode ? "Edit":"Create")" enctype="multipart/form-data">
 
                             <div class="mb-3">
@@ -84,20 +89,17 @@
                                 {
                                     <div class="mb-3">
                                         <div class="form-check">
-                                            @foreach (ImprovementsViewModel item in Model.Improvements)
+                                            @if (improvements.IsChecked)
                                             {
-                                                @if (improvements.Id == item.Id)
-                                                {
-                                                    <input class="form-check-input" value="@improvements.Id" type="checkbox" name="ImprovementsId" id="improvement-@improvements.Id" checked />
-                                                    <label class="form-check-label" for="improvement-@improvements.Id">@improvements.Name</label>
-                                                }
-                                                else
-                                                {
-                                                    <input class="form-check-input" value="@improvements.Id" type="checkbox" name="ImprovementsId" id="improvement-@improvements.Id" />
-                                                    <label class="form-check-label" for="improvement-@improvements.Id">@improvements.Name</label>
-                                                }
-                                            }
+                                                <input class="form-check-input" value="@improvements.Id" type="checkbox" name="ImprovementsId" id="improvement-@improvements.Id" checked />
+                                                <label class="form-check-label" for="improvement-@improvements.Id">@improvements.Name</label>
 
+                                            }
+                                            else
+                                            {
+                                                <input class="form-check-input" value="@improvements.Id" type="checkbox" name="ImprovementsId" id="improvement-@improvements.Id"  />
+                                                <label class="form-check-label" for="improvement-@improvements.Id">@improvements.Name</label>
+                                            }
                                         </div>
                                     </div>
                                 }

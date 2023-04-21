@@ -33,6 +33,8 @@ namespace Real_Estate.Core.Application
 
             services.AddTransient<IPropertiesService, PropertiesService>();
 
+            services.AddTransient<IPropertiesImprovementsService, PropertiesImprovementsService>();
+
             #endregion
         }
 	}

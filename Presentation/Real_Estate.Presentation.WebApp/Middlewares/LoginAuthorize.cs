@@ -12,7 +12,8 @@ namespace Real_Estate.Presentation.WebApp.Middlewares
 			_userSession = userSession;
 		}
 
-		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+		public async Task OnActionExecutionAsync(ActionExecutingContext context, 
+            ActionExecutionDelegate next)
 		{
 			if (_userSession.HasUser())
 			{

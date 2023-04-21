@@ -21,12 +21,14 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.DeleteImpr
         private readonly IImprovementsRepository _improvementsRepository;
 
         private readonly IPropertiesRepository _propertiesRepository;
+        private readonly IPropertiesImprovementsRepository _propertiesImprovementsRepository;
 
         public DeleteImprovementsByIdCommandHandler(IImprovementsRepository improvementsRepository, 
-            IPropertiesRepository propertiesRepository)
+            IPropertiesRepository propertiesRepository, IPropertiesImprovementsRepository propertiesImprovementsRepository)
         {
             _improvementsRepository = improvementsRepository;
             _propertiesRepository = propertiesRepository;
+            _propertiesImprovementsRepository = propertiesImprovementsRepository;
         }
 
         public async Task<int> Handle(DeleteImprovementsByIdCommand command, 
@@ -37,17 +39,22 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.DeleteImpr
             if (improvements == null)
                 throw new Exception("Improvements Not Found.");
 
+            var improvementsProperties = await _propertiesImprovementsRepository.GetAllAsync();
+
             var properties = await _propertiesRepository.GetAllAsync();
 
-            // change Improvements.Id on TypeOfPropertyId
-            var propertiesRelational = properties.Where(x => 
-                x.TypeOfPropertyId == command.Id).ToList();
+            var improvementList = improvementsProperties.Where(x => x.ImprovementId == command.Id);
 
-            if (propertiesRelational.Count() != 0)
+            foreach (var improvement in improvementList)
             {
-                foreach (var property in propertiesRelational)
+                await _propertiesImprovementsRepository.DeleteAsync(improvement);
+
+                foreach (var property in properties)
                 {
-                    await _propertiesRepository.DeleteAsync(property);
+                    if (property.Id == improvement.PropertyId)
+                    {
+                        await _propertiesRepository.DeleteAsync(property);
+                    }
                 }
             }
 

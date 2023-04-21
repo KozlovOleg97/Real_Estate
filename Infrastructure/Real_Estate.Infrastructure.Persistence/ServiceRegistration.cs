@@ -38,6 +38,7 @@ namespace Real_Estate.Infrastructure.Persistence
             services.AddTransient<ITypeOfPropertiesRepository, TypeOfPropertiesRepository>();
             services.AddTransient<ITypeOfSalesRepository, TypeOfSalesRepository>();
             services.AddTransient<IPropertiesRepository, PropertiesRepository>();
+            services.AddTransient<IPropertiesImprovementsRepository, PropertiesImprovementsRepository>();
 
             #endregion
         }

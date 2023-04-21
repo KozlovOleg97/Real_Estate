@@ -43,6 +43,13 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             return View(properties);
         }
+
+        public async Task<IActionResult> GetAll()
+        {
+            var properties = await _propertiesService.GetAllByAgentIdWithInclude(userviewModel.Id);
+            return View(properties);
+        }
+
         public async Task<IActionResult> Create()
         {
             SavePropertiesViewModel vm = new SavePropertiesViewModel();
@@ -209,6 +216,19 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             await _propertiesService.UpdatePropertyWithImprovementsAsync(savePropertiesVmToUpdate, savePropertiesVmToUpdate.Id);
             return RedirectToRoute(new { controller = "Agent", action = "Index" });
 
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            return View(await _propertiesService.GetByIdWithInclude(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            await _propertiesService.Delete(id);
+            UploadImagesHelper.DeletePropertyImage(id);
+            return RedirectToRoute(new { controller = "Agent", action = "Index" });
         }
 
         public async Task<IActionResult> MyProfile()

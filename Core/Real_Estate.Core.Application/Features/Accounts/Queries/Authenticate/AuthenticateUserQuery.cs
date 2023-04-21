@@ -36,7 +36,18 @@ namespace Real_Estate.Core.Application.Features.Accounts.Queries.Authenticate
             CancellationToken cancellationToken)
         {
             var data = _mapper.Map<AuthenticationRequest>(query);
-            return await _accountService.AuthenticateAsync(data);
+
+            var response = await _accountService.AuthenticateAsync(data);
+
+            if (response.HasError == false)
+            {
+                foreach (var rol in response.Roles)
+                {
+                    if (rol == "Agent" || rol == "Client") 
+                        throw new Exception("I don't have permission to use the web API.");
+                }
+            }
+            return response;
         }
     }
 }

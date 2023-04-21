@@ -41,21 +41,14 @@ namespace Real_Estate.Core.Application.Features.Improvements.Commands.DeleteImpr
 
             var improvementsProperties = await _propertiesImprovementsRepository.GetAllAsync();
 
-            var properties = await _propertiesRepository.GetAllAsync();
-
             var improvementList = improvementsProperties.Where(
                 x => x.ImprovementId == command.Id);
 
-            foreach (var improvement in improvementList)
+            if (improvementList is not null)
             {
-                await _propertiesImprovementsRepository.DeleteAsync(improvement);
-
-                foreach (var property in properties)
+                foreach (var improvement in improvementList)
                 {
-                    if (property.Id == improvement.PropertyId)
-                    {
-                        await _propertiesRepository.DeleteAsync(property);
-                    }
+                    await _propertiesImprovementsRepository.DeleteAsync(improvement);
                 }
             }
 

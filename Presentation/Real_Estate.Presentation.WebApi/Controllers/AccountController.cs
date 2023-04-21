@@ -29,11 +29,18 @@ namespace Real_Estate.Presentation.WebApi.Controllers
         )]
         public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest request)
 		{
-            return Ok(await Mediator.Send(new AuthenticateUserQuery
+            try
             {
-                Email = request.Email, 
-                Password = request.Password
-            }));
+                return Ok(await Mediator.Send(new AuthenticateUserQuery
+                {
+                    Email = request.Email, 
+                    Password = request.Password
+                }));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
 		[HttpPost("RegisterAdminUser")]

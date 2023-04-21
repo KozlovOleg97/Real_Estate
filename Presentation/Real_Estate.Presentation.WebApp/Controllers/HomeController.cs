@@ -34,7 +34,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Filters(string? propertyCode, List<int>? propertyIds, decimal minPrice, decimal maxPrice, int bathroomsQuantity, int roomsQuantity)
+        public async Task<IActionResult> Filters(string? propertyCode, List<int>? propertyIds, 
+            decimal minPrice, decimal maxPrice, int bathroomsQuantity, int roomsQuantity)
         {
             FilterPropertiesViewModel filterPropertiesViewModel = new()
             {

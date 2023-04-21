@@ -54,5 +54,22 @@ namespace Real_Estate.Infrastructure.Persistence.Repositories
             await AddImprovementsToProperties(property);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteImprovementsToProperties(int id)
+        {
+            List<PropertiesImprovements> allPropertiesImprovementsList = await _dbContext.PropertiesImprovements.ToListAsync();
+
+            foreach (var item in allPropertiesImprovementsList)
+            {
+                if (item.PropertyId == id)
+                {
+                    _dbContext.PropertiesImprovements.Remove(item);
+
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+        }
     }
 }

@@ -272,7 +272,10 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         public async Task<IActionResult> DeletePost(int id)
         {
             await _propertiesService.Delete(id);
+
             UploadImagesHelper.DeletePropertyImage(id);
+
+            await _propertiesService.DeleteImprovementsToProperties(id);
             return RedirectToRoute(new { controller = "Agent", action = "GetAll" });
         }
 

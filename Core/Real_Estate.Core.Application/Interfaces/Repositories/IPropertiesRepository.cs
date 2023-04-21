@@ -11,5 +11,6 @@ namespace Real_Estate.Core.Application.Interfaces.Repositories
     {
         Task AddImprovementsToProperties(Properties property);
         Task UpdateImprovementsToProperties(Properties property);
+        Task DeleteImprovementsToProperties(int id);
     }
 }

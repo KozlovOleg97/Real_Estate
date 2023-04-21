@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application.DTOs.Account;
+using Real_Estate.Core.Application.Enums;
 using Real_Estate.Core.Application.Helpers;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.TypeOfSales;
@@ -31,6 +32,23 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (currentlyUser.Roles.FirstOrDefault() == Roles.Agent.ToString())
+            {
+                return RedirectToRoute(new { controller = "Agent", action = "Index" });
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Client.ToString())
+            {
+                return RedirectToRoute(new { controller = "Client", action = "Index" });
+
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Developer.ToString())
+            {
+                return RedirectToRoute(new { controller = "Home", action = "AccessDenied" });
+
+            }
+
             List<TypeOfSalesViewModel> typeOfSalesList = await _typeOfSalesService.GetAllViewModel();
             return View(typeOfSalesList);
         }
@@ -38,6 +56,23 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string Name, string Description)
         {
+            if (currentlyUser.Roles.FirstOrDefault() == Roles.Agent.ToString())
+            {
+                return RedirectToRoute(new { controller = "Agent", action = "Index" });
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Client.ToString())
+            {
+                return RedirectToRoute(new { controller = "Client", action = "Index" });
+
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Developer.ToString())
+            {
+                return RedirectToRoute(new { controller = "Home", action = "AccessDenied" });
+
+            }
+
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("userVaidation", "Something was wrong");
@@ -59,12 +94,46 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
+            if (currentlyUser.Roles.FirstOrDefault() == Roles.Agent.ToString())
+            {
+                return RedirectToRoute(new { controller = "Agent", action = "Index" });
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Client.ToString())
+            {
+                return RedirectToRoute(new { controller = "Client", action = "Index" });
+
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Developer.ToString())
+            {
+                return RedirectToRoute(new { controller = "Home", action = "AccessDenied" });
+
+            }
+
             await _typeOfSalesService.Delete(id);
             return RedirectToRoute(new { controller = "TypeOfSales", action = "Index" });
         }
 
         public async Task<IActionResult> Update(int id)
         {
+            if (currentlyUser.Roles.FirstOrDefault() == Roles.Agent.ToString())
+            {
+                return RedirectToRoute(new { controller = "Agent", action = "Index" });
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Client.ToString())
+            {
+                return RedirectToRoute(new { controller = "Client", action = "Index" });
+
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Developer.ToString())
+            {
+                return RedirectToRoute(new { controller = "Home", action = "AccessDenied" });
+
+            }
+
             SaveTypeOfSalesViewModel typeOfSalesSaveViewModel = await _typeOfSalesService.GetByIdSaveViewModel(id);
 
             return View("UpdateTypeOfSales", typeOfSalesSaveViewModel);
@@ -74,6 +143,23 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
         public async Task<IActionResult> Update(SaveTypeOfSalesViewModel typeOfSalesSaveViewModel)
         {
+            if (currentlyUser.Roles.FirstOrDefault() == Roles.Agent.ToString())
+            {
+                return RedirectToRoute(new { controller = "Agent", action = "Index" });
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Client.ToString())
+            {
+                return RedirectToRoute(new { controller = "Client", action = "Index" });
+
+            }
+
+            else if (currentlyUser.Roles.FirstOrDefault() == Roles.Developer.ToString())
+            {
+                return RedirectToRoute(new { controller = "Home", action = "AccessDenied" });
+
+            }
+
             await _typeOfSalesService.Update(typeOfSalesSaveViewModel, typeOfSalesSaveViewModel.Id);
 
             return RedirectToRoute(new { controller = "TypeOfSales", action = "Index" });

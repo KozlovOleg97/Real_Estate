@@ -15,7 +15,7 @@ using System.Data;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IPropertiesService _propertiesService;

@@ -10,7 +10,7 @@ using Real_Estate.Core.Application.ViewModels.TypeOfProperties;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class TypeOfPropertiesController : Controller
     {
         private readonly ITypeOfPropertiesService _typeOfPropertiesService;

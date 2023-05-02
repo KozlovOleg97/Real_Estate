@@ -10,7 +10,7 @@ using Real_Estate.Core.Application.ViewModels.Improvements;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class ImprovementsController : Controller
     {
         private readonly IImprovementsService _improvementsService;

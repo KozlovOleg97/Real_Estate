@@ -11,8 +11,7 @@ using Real_Estate.Core.Application.Interfaces.Repositories;
 
 namespace Real_Estate.Core.Application.Services
 {
-    public class ImprovementsService :
-        GenericService<SaveImprovementsViewModel,
+    public class ImprovementsService : GenericService<SaveImprovementsViewModel,
             ImprovementsViewModel, Improvements>, IImprovementsService
     {
         private readonly IGenericRepositoryAsync<Improvements> _repository;

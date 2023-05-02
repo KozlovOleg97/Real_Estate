@@ -26,13 +26,16 @@ namespace Real_Estate.Infrastructure.Shared.Services
 			try
 			{
 				// Create Message
+
 				var email = new MimeMessage();
 				email.Sender = MailboxAddress.Parse(request.From ?? _mailSettings.EmailFrom);
 				email.To.Add(MailboxAddress.Parse(request.To));
 				email.Subject = request.Subject;
+
 				var builder = new BodyBuilder();
 				builder.HtmlBody = request.Body;
 				email.Body = builder.ToMessageBody();
+
 				using var smtp = new SmtpClient();
 				smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
 				smtp.Connect(_mailSettings.SmtpHost, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);

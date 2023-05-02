@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Real_Estate.Core.Application.Helpers;
 using Real_Estate.Core.Application.Interfaces.Services;
-using System;
+using Real_Estate.Core.Application.Interfaces.Repositories;
+using Real_Estate.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Real_Estate.Core.Application.Interfaces.Repositories;
 
 namespace Real_Estate.Core.Application.Services
 {
@@ -44,6 +45,7 @@ namespace Real_Estate.Core.Application.Services
         public virtual async Task Delete(int id)
         {
             var product = await _repository.GetByIdAsync(id);
+
             await _repository.DeleteAsync(product);
         }
 
@@ -52,6 +54,7 @@ namespace Real_Estate.Core.Application.Services
             var entity = await _repository.GetByIdAsync(id);
 
             SaveViewModel vm = _mapper.Map<SaveViewModel>(entity);
+
             return vm;
         }
 

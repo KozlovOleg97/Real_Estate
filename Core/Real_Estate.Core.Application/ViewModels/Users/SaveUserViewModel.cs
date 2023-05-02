@@ -44,11 +44,11 @@ namespace Real_Estate.Core.Application.ViewModels.Users
 
 		public string? ImagePath { get; set; }
 
-        //[Required(ErrorMessage = "You must type the ID card")]
-        //[DataType(DataType.Text)]
-        //public string? IDCard { get; set; }
+		[Required(ErrorMessage = "You must type the ID card")]
+		[DataType(DataType.Text)]
+		public string? IDCard { get; set; }
 
-        [DataType(DataType.Upload)]
+		[DataType(DataType.Upload)]
 		public IFormFile? File { get; set; }
 
 		public bool HasError { get; set; }

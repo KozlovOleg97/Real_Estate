@@ -28,6 +28,7 @@ namespace Real_Estate.Infrastructure.Identity.Seeds
 			if (userManager.Users.All(userAgent => userAgent.Id != defaultAgent.Email))
 			{
 				var user = await userManager.FindByEmailAsync(defaultAgent.Email);
+
 				if (user == null)
 				{
 					await userManager.CreateAsync(defaultAgent, "SimplePa$$word12345");

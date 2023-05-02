@@ -29,10 +29,6 @@ namespace Real_Estate.Presentation.WebApi.Extensions
 					}
 				});
 
-                //string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                //string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //options.IncludeXmlComments(xmlPath);
-
                 options.EnableAnnotations();
                 options.DescribeAllParametersInCamelCase();
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

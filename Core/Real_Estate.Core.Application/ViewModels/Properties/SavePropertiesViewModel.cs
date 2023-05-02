@@ -51,8 +51,6 @@ namespace Real_Estate.Core.Application.ViewModels.Properties
         [DataType(DataType.Upload)]
         public IFormFile? ImageFileFour { get; set; }
 
-        //public int ImprovementsId { get; set; }
-
         [Required(ErrorMessage = "You must choose the Type of Property")]
         [Range(1, int.MaxValue, ErrorMessage = "You must choose the Type of Property")]
         public int TypeOfPropertyId { get; set; }

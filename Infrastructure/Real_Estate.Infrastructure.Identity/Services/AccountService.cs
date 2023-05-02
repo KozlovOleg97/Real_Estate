@@ -423,12 +423,14 @@ namespace Real_Estate.Infrastructure.Identity.Services
 
             foreach (var user in agents)
             {
-                AgentsViewModel agent = new();
-                agent.Id = user.Id;
-                agent.FirstName = user.FirstName;
-                agent.LastName = user.LastName;
-                agent.Email = user.Email;
-                agent.Phone = user.PhoneNumber;
+                AgentsViewModel agent = new()
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Phone = user.PhoneNumber
+                };
                 response.Add(agent);
             }
 
@@ -442,12 +444,14 @@ namespace Real_Estate.Infrastructure.Identity.Services
 
             foreach (var user in users)
             {
-                AgentsViewModel agent = new();
-                agent.Id = user.Id;
-                agent.FirstName = user.FirstName;
-                agent.LastName = user.LastName;
-                agent.Email = user.Email;
-                agent.Phone = user.PhoneNumber;
+                AgentsViewModel agent = new()
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Phone = user.PhoneNumber
+                };
                 response.Add(agent);
             }
             return response;
@@ -518,7 +522,7 @@ namespace Real_Estate.Infrastructure.Identity.Services
                         userViewModel.ImagePath = user.ImagePath;
                     }
                     response.Add(userViewModel);
-                }
+            }
 
             return response;
 

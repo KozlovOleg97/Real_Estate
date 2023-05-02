@@ -27,7 +27,8 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Commands.DeleteTypeO
             _propertiesRepository = propertiesRepository;
         }
 
-        public async Task<int> Handle(DeleteTypeOfSalesByIdCommand command, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteTypeOfSalesByIdCommand command, 
+            CancellationToken cancellationToken)
         {
             var typeOfSales = await _typeOfSalesRepository.GetByIdAsync(command.Id);
 
@@ -37,7 +38,8 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Commands.DeleteTypeO
             var properties = await _propertiesRepository.GetAllAsync();
 
             //change Improvements.Id on TypeOfPropertyId
-            var propertiesRelational = properties.Where(x => x.TypeOfSaleId == command.Id).ToList();
+            var propertiesRelational = properties.Where(x => 
+                x.TypeOfSaleId == command.Id).ToList();
 
             if (propertiesRelational.Count() != 0)
             {

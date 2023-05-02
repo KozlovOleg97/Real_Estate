@@ -18,6 +18,7 @@ namespace Real_Estate.Core.Application.Helpers
 		public static T Get<T>(this ISession session, string key)
 		{
 			var value = session.GetString(key);
+
 			return value == null ? default : JsonConvert.DeserializeObject<T>(value);
 		}
 	}

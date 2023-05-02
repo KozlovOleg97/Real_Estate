@@ -20,7 +20,8 @@ namespace Real_Estate.Infrastructure.Identity.Seeds
 				Email = "admin@email.com",
 				FirstName = "Admin FirstName",
 				LastName = "Admin LastName",
-				EmailConfirmed = true,
+                ImagePath = "/Images/profile.jpeg",
+                EmailConfirmed = true,
 				PhoneNumberConfirmed = true
 			};
 

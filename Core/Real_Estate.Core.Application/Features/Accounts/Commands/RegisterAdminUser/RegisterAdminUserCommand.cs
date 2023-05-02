@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using MediatR;
 using Real_Estate.Core.Application.DTOs.Account;
@@ -47,7 +42,9 @@ namespace Real_Estate.Core.Application.Features.Accounts.Commands.RegisterAdminU
             CancellationToken cancellationToken)
         {
             command.EmailConfirmed = true;
+
             var request = _mapper.Map<RegisterRequest>(command);
+
             return await _accountService.RegisterUserAsync(request, "", Roles.Admin);
         }
     }

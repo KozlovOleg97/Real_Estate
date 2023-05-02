@@ -17,7 +17,8 @@ namespace Real_Estate.Core.Application.Features.Properties.Queries.GetProperties
         public string Code { get; set; }
     }
 
-    public class GetPropertiesByCodeQueryHandler : IRequestHandler<GetPropertiesByCodeQuery, PropertiesViewModel>
+    public class GetPropertiesByCodeQueryHandler : IRequestHandler<GetPropertiesByCodeQuery, 
+        PropertiesViewModel>
     {
         private readonly IPropertiesRepository _PropertiesRepository;
         private readonly IMapper _mapper;
@@ -28,7 +29,8 @@ namespace Real_Estate.Core.Application.Features.Properties.Queries.GetProperties
             _mapper = mapper;
         }
 
-        public async Task<PropertiesViewModel> Handle(GetPropertiesByCodeQuery query, CancellationToken cancellationToken)
+        public async Task<PropertiesViewModel> Handle(GetPropertiesByCodeQuery query, 
+            CancellationToken cancellationToken)
         {
             var properties = await _PropertiesRepository.GetAllAsync();
 

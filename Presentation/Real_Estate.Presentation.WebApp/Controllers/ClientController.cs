@@ -78,13 +78,15 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             }
 
             var usersList = await _userService.GetAllUsersViewModels();
-            List<UserViewModel> AgentsList = usersList.Where(user => user.Role == Roles.Agent.ToString()).ToList();
+            List<UserViewModel> AgentsList = usersList.Where(
+                user => user.Role == Roles.Agent.ToString()).ToList();
 
             List<PropertiesViewModel> propertiesList = await _propertiesService.GetAll();
 
             foreach (UserViewModel agent in AgentsList)
             {
-                agent.PropertiesQuantity = propertiesList.Where(property => property.AgentId == agent.Id).Count();
+                agent.PropertiesQuantity = propertiesList.Where(
+                    property => property.AgentId == agent.Id).Count();
             }
 
             return View(AgentsList.OrderBy(x => x.FirstName).ToList());

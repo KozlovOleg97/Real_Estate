@@ -14,6 +14,7 @@ namespace Real_Estate.Core.Application.Helpers
             // Get directory path
 
             string basePath = $"/Images/Users/{userName}";
+
             string path = Path.Combine(Directory.GetCurrentDirectory(),
                 $"wwwroot{basePath}");
 
@@ -27,7 +28,9 @@ namespace Real_Estate.Core.Application.Helpers
             // Get file path
 
             Guid guid = Guid.NewGuid();
+
             FileInfo fileInfo = new(file.FileName);
+
             string fileName = guid + fileInfo.Extension;
 
             string fileNameWithPath = Path.Combine(path, fileName);
@@ -52,6 +55,7 @@ namespace Real_Estate.Core.Application.Helpers
             }
 
             string basePath = $"/Images/Users/{userName}";
+
             string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
 
             //create folder if not exist
@@ -64,7 +68,9 @@ namespace Real_Estate.Core.Application.Helpers
             //get file extension
 
             Guid guid = Guid.NewGuid();
+
             FileInfo fileInfo = new(file.FileName);
+
             string fileName = guid + fileInfo.Extension;
 
             string fileNameWithPath = Path.Combine(path, fileName);

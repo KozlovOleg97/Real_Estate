@@ -37,7 +37,8 @@ namespace Real_Estate.Core.Application.Features.TypeOfProperties.Commands.Delete
 
             var properties = await _propertiesRepository.GetAllAsync();
 
-            var propertiesRelational = properties.Where(x => x.TypeOfPropertyId == command.Id).ToList();
+            var propertiesRelational = properties.Where(x => 
+                x.TypeOfPropertyId == command.Id).ToList();
 
             if (propertiesRelational.Count() != 0)
             {

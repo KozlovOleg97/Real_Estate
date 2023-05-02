@@ -54,7 +54,9 @@ namespace Real_Estate.Core.Application.Features.Accounts.Commands.RegisterDevelo
             CancellationToken cancellationToken)
         {
             command.EmailConfirmed = true;
+
             var request = _mapper.Map<RegisterRequest>(command);
+
             return await _accountService.RegisterUserAsync(request, "", Roles.Developer);
         }
     }

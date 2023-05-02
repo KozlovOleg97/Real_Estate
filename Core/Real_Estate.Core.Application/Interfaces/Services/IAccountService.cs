@@ -30,7 +30,6 @@ namespace Real_Estate.Core.Application.Interfaces.Services
         Task<UpdateAgentUserResponse> UpdateUserAsync(UpdateUserViewModel request);
         Task<ChangeUserStatusResponse> ChangeUserStatusAsync(string id);
         Task<ChangeUserStatusResponse> DeleteUserAsync(string id);
-
         Task<AgentProperty> GetAgentPropertyByIdAsync(string id);
     }
 }

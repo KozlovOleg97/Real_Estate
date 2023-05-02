@@ -20,20 +20,20 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetTypeOfSal
     public class GetTypeOfSalesByIdQueryHandler : IRequestHandler<GetTypeOfSalesByIdQuery, 
         TypeOfSalesViewModel>
     {
-        private readonly ITypeOfSalesRepository _TypeOfSalesRepository;
+        private readonly ITypeOfSalesRepository _typeOfSalesRepository;
         private readonly IMapper _mapper;
 
-        public GetTypeOfSalesByIdQueryHandler(ITypeOfSalesRepository TypeOfSalesRepository, 
+        public GetTypeOfSalesByIdQueryHandler(ITypeOfSalesRepository typeOfSalesRepository, 
             IMapper mapper)
         {
-            _TypeOfSalesRepository = TypeOfSalesRepository;
+            _typeOfSalesRepository = typeOfSalesRepository;
             _mapper = mapper;
         }
 
         public async Task<TypeOfSalesViewModel> Handle(GetTypeOfSalesByIdQuery query, 
             CancellationToken cancellationToken)
         {
-            var TypeOfSale = await _TypeOfSalesRepository.GetByIdAsync(query.Id);
+            var TypeOfSale = await _typeOfSalesRepository.GetByIdAsync(query.Id);
 
             if (TypeOfSale is null) throw new Exception("Type of sale Not Found");
 

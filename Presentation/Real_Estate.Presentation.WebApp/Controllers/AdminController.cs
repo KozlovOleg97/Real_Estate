@@ -220,7 +220,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             if (role == Roles.Admin.ToString())
             {
-                response = await _userService.RegisterAsync(saveUserViewModel, origin, Roles.Admin);
+                response = await _userService.RegisterAsync(saveUserViewModel, origin, 
+                    Roles.Admin);
 
                 if (response.HasError)
                 {
@@ -236,7 +237,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             if (role == Roles.Developer.ToString())
             {
-                response = await _userService.RegisterAsync(saveUserViewModel, origin, Roles.Developer);
+                response = await _userService.RegisterAsync(saveUserViewModel, origin, 
+                    Roles.Developer);
 
                 if (response.HasError)
                 {

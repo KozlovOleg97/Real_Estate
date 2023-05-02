@@ -395,8 +395,10 @@ namespace Real_Estate.Infrastructure.Identity.Services
         public async Task<bool> ChangesStatusUser(string id, bool status)
         {
             var user = await _userManager.FindByIdAsync(id);
+
             if (user is null) 
                 throw new Exception("UserName doesn't exist.");
+
             if (status == false)
             {
                 user.EmailConfirmed = false;

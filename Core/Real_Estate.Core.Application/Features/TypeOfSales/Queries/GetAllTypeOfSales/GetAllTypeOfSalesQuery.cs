@@ -16,12 +16,12 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetAllTypeOf
             IEnumerable<TypeOfSalesViewModel>>
         {
 
-            private readonly ITypeOfSalesRepository _TypeOfSalesRepository;
+            private readonly ITypeOfSalesRepository _typeOfSalesRepository;
             private readonly IMapper _mapper;
-            public GetAllCategoriesQueryHandler(ITypeOfSalesRepository TypeOfSalesRepository, 
+            public GetAllCategoriesQueryHandler(ITypeOfSalesRepository typeOfSalesRepository, 
                 IMapper mapper)
             {
-                _TypeOfSalesRepository = TypeOfSalesRepository;
+                _typeOfSalesRepository = typeOfSalesRepository;
                 _mapper = mapper;
             }
 
@@ -29,12 +29,13 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Queries.GetAllTypeOf
                 CancellationToken cancellationToken)
             {
                 var typeOfSalesViewModel = await GetAllViewModel();
+
                 return typeOfSalesViewModel;
             }
 
             private async Task<List<TypeOfSalesViewModel>> GetAllViewModel()
             {
-                var typeOfSalesList = await _TypeOfSalesRepository.GetAllAsync();
+                var typeOfSalesList = await _typeOfSalesRepository.GetAllAsync();
 
                 if (typeOfSalesList.Count() == 0) 
                     throw new Exception("There are not Type Of Sales.");

@@ -20,20 +20,20 @@ namespace Real_Estate.Core.Application.Features.TypeOfProperties.Queries.GetType
     public class GetTypeOfPropertiesByIdQueryHandler : IRequestHandler<GetTypeOfPropertiesByIdQuery, 
         TypeOfPropertiesViewModel>
     {
-        private readonly ITypeOfPropertiesRepository _TypeOfPropertiesRepository;
+        private readonly ITypeOfPropertiesRepository _typeOfPropertiesRepository;
         private readonly IMapper _mapper;
 
         public GetTypeOfPropertiesByIdQueryHandler(ITypeOfPropertiesRepository TypeOfPropertiesRepository,
             IMapper mapper)
         {
-            _TypeOfPropertiesRepository = TypeOfPropertiesRepository;
+            _typeOfPropertiesRepository = TypeOfPropertiesRepository;
             _mapper = mapper;
         }
 
         public async Task<TypeOfPropertiesViewModel> Handle(GetTypeOfPropertiesByIdQuery query,
             CancellationToken cancellationToken)
         {
-            var typeOfProperty = await _TypeOfPropertiesRepository.GetByIdAsync(query.Id);
+            var typeOfProperty = await _typeOfPropertiesRepository.GetByIdAsync(query.Id);
 
             if (typeOfProperty is null) 
                 throw new Exception("Type Of Property Not Found");

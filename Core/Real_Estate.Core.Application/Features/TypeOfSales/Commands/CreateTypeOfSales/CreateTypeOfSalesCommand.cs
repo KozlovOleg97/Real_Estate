@@ -14,7 +14,7 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Commands.CreateTypeO
 {
     public class CreateTypeOfSalesCommand : IRequest<int>
     {
-        //public int Id { get; set; }
+        public int Id { get; set; }
         [SwaggerParameter(Description = "The name of the type of sale")]
         [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; }
@@ -26,12 +26,12 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Commands.CreateTypeO
 
     public class CreateTypeOfSalesCommandHandler : IRequestHandler<CreateTypeOfSalesCommand, int>
     {
-        private readonly ITypeOfSalesRepository _improvementsRepository;
+        private readonly ITypeOfSalesRepository _typeOfSalesRepository;
         private readonly IMapper _mapper;
-        public CreateTypeOfSalesCommandHandler(ITypeOfSalesRepository improvementsRepository, 
+        public CreateTypeOfSalesCommandHandler(ITypeOfSalesRepository typeOfSalesRepository, 
             IMapper mapper)
         {
-            _improvementsRepository = improvementsRepository;
+            _typeOfSalesRepository = typeOfSalesRepository;
             _mapper = mapper;
         }
         public async Task<int> Handle(CreateTypeOfSalesCommand command, 
@@ -39,7 +39,7 @@ namespace Real_Estate.Core.Application.Features.TypeOfSales.Commands.CreateTypeO
         {
             var improvements = _mapper.Map<Domain.Entities.TypeOfSales>(command);
 
-            improvements = await _improvementsRepository.AddAsync(improvements);
+            improvements = await _typeOfSalesRepository.AddAsync(improvements);
 
             return improvements.Id;
         }

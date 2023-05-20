@@ -8,216 +8,198 @@ using Real_Estate.Presentation.WebApp.Middlewares;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
-	public class UserController : Controller
-	{
-		private readonly IUserService _userService;
-		public UserController(IUserService userService)
-		{
-			_userService = userService;
-		}
+    public class UserController : Controller
+    {
+        private readonly IUserService _userService;
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		public IActionResult Index()
-		{
-			return View(new LoginViewModel());
-		}
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		[HttpPost]
-		public async Task<IActionResult> Index(LoginViewModel loginViewModel)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(loginViewModel);
-			}
 
-			AuthenticationResponse userViewModel = await _userService.LoginAsync(loginViewModel);
-			if (userViewModel == null && userViewModel.HasError != true)
-			{
-				HttpContext.Session.Set<AuthenticationResponse>("user", userViewModel);
+        [ServiceFilter(typeof(LoginAuthorize))]
+        public IActionResult Index()
+        {
 
-                if (userViewModel.Roles.FirstOrDefault() == Roles.Client.ToString())
+            return View(new LoginViewModel());
+        }
+
+
+        [ServiceFilter(typeof(LoginAuthorize))]
+        [HttpPost]
+        public async Task<IActionResult> Index(LoginViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            AuthenticationResponse userVm = await _userService.LoginAsync(vm);
+            if (userVm != null && userVm.HasError != true)
+            {
+                HttpContext.Session.Set<AuthenticationResponse>("user", userVm);
+
+
+                if (userVm.Roles.FirstOrDefault() == Roles.Client.ToString())
                 {
-					return RedirectToRoute(new
-					{
-						controller = "Client",
-						action = "Index"
-					});
-				}
+                    return RedirectToRoute(new { controller = "Client", action = "Index" });
+                }
 
-				else if (userViewModel.Roles.FirstOrDefault() == Roles.Agent.ToString())
-				{
-					return RedirectToRoute(new
-					{
-						controller = "Agent",
-						action = "Index"
-					});
-				}
+                else if (userVm.Roles.FirstOrDefault() == Roles.Agent.ToString())
+                {
+                    return RedirectToRoute(new { controller = "Agent", action = "Index" });
+                }
 
-				else if (userViewModel.Roles.FirstOrDefault() == Roles.Developer.ToString())
-				{
-					// You must say him, that he can't enter in Real Estate
+                else if (userVm.Roles.FirstOrDefault() == Roles.Developer.ToString())
+                {
+                    
+                    return RedirectToRoute(new { controller = "User", action = "AccessDenied" });
+                }
 
-					return RedirectToRoute(new
-					{
-						controller = "User",
-						action = "AccessDenied"
-					});
-				}
+                else
+                {
+                    return RedirectToRoute(new { controller = "Admin", action = "Index" });
+                }
 
-				else
-				{
-					return RedirectToRoute(new
-					{
-						controller = "Admin",
-						action = "Index"
-					});
-				}
-			}
+            }
 
-			else
-			{
-				loginViewModel.HasError = userViewModel.HasError;
-				loginViewModel.Error = userViewModel.Error;
-				return View(loginViewModel);
-			}
-		}
+            else
+            {
+                vm.HasError = userVm.HasError;
+                vm.Error = userVm.Error;
+                return View(vm);
+            }
 
-		public async Task<IActionResult> Logout()
-		{
-			await _userService.SignOutAsync();
-			HttpContext.Session.Remove("user");
-			return RedirectToRoute(new
-			{
-				controller = "Home",
-				action = "Index"
-			});
-		}
+        }
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		public IActionResult Register()
-		{
-			List<string> userTypes = new List<string>();
-			userTypes.Add(Roles.Client.ToString());
-			userTypes.Add(Roles.Agent.ToString());
-			ViewBag.UserTypes = userTypes;
-			return View(new SaveUserViewModel());
-		}
+        public async Task<IActionResult> Logout()
+        {
+            await _userService.SignOutAsync();
+            HttpContext.Session.Remove("user");
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
+        }
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		[HttpPost]
-		public async Task<IActionResult> Register(SaveUserViewModel saveUserViewModel, string role)
-		{
-			if (!ModelState.IsValid)
-			{
-				List<string> userTypes = new List<string>();
-				userTypes.Add(Roles.Client.ToString());
-				userTypes.Add(Roles.Agent.ToString());
-				ViewBag.UserTypes = userTypes;
-				return View(saveUserViewModel);
-			}
+        [ServiceFilter(typeof(LoginAuthorize))]
+        public IActionResult Register()
+        {
+            List<string> userTypes = new List<string>();
+            userTypes.Add(Roles.Client.ToString());
+            userTypes.Add(Roles.Agent.ToString());
+            ViewBag.UserTypes = userTypes;
+            return View(new SaveUserViewModel());
+        }
 
-			saveUserViewModel.ImagePath = UploadImagesHelper.UploadUserImage(saveUserViewModel.File,
-				saveUserViewModel.UserName);
+        [ServiceFilter(typeof(LoginAuthorize))]
+        [HttpPost]
+        public async Task<IActionResult> Register(SaveUserViewModel vm, string role)
+        {
+            if (!ModelState.IsValid)
+            {
+                List<string> userTypes = new List<string>();
+                userTypes.Add(Roles.Client.ToString());
+                userTypes.Add(Roles.Agent.ToString());
+                ViewBag.UserTypes = userTypes;
+                return View(vm);
+            }
 
-			var origin = Request.Headers["origin"];
-			RegisterResponse response = new RegisterResponse();
+            vm.ImagePath = UploadImagesHelper.UploadUserImage(vm.File, vm.UserName);
 
-			if (role == Roles.Client.ToString())
-			{
-				response = await _userService.RegisterAsync(saveUserViewModel, origin, Roles.Client);
-			}
-			else if (role == Roles.Agent.ToString())
-			{
-				response = await _userService.RegisterAsync(saveUserViewModel, origin, Roles.Agent);
-			}
+            var origin = Request.Headers["origin"];
+            RegisterResponse response = new RegisterResponse();
 
-			if (response.HasError)
-			{
-				saveUserViewModel.HasError = response.HasError;
-				saveUserViewModel.Error = response.Error;
 
-				List<string> userTypes = new List<string>();
-				userTypes.Add(Roles.Client.ToString());
-				userTypes.Add(Roles.Agent.ToString());
-				ViewBag.UserTypes = userTypes;
+            if (role == Roles.Client.ToString())
+            {
+                response = await _userService.RegisterAsync(vm, origin, Roles.Client);
+            }
+            else if (role == Roles.Agent.ToString())
+            {
+                response = await _userService.RegisterAsync(vm, origin, Roles.Agent);
+            }
 
-				return View(saveUserViewModel);
-			}
 
-			return RedirectToRoute(new
-			{
-				controller = "User",
-				action = "Index"
-			});
-		}
+            if (response.HasError)
+            {
+                vm.HasError = response.HasError;
+                vm.Error = response.Error;
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		public async Task<IActionResult> ConfirmEmail(string userId, string token)
-		{
-			string response = await _userService.ConfirmEmailAsync(userId, token);
-			return View("ConfirmEmail", response);
-		}
+                List<string> userTypes = new List<string>();
+                userTypes.Add(Roles.Client.ToString());
+                userTypes.Add(Roles.Agent.ToString());
+                ViewBag.UserTypes = userTypes;
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		public async Task<IActionResult> ForgotPassword()
-		{
-			return View(new ForgotPasswordViewModel());
-		}
+                return View(vm);
+            }
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		[HttpPost]
-		public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(forgotPasswordViewModel);
-			}
 
-			var origin = Request.Headers["origin"];
-			ForgotPasswordResponse response = await _userService.ForgotPasswordAsync(forgotPasswordViewModel, origin);
-			if (response.HasError)
-			{
-				forgotPasswordViewModel.HasError = response.HasError;
-				forgotPasswordViewModel.Error = response.Error;
-				return View(forgotPasswordViewModel);
-			}
-			return RedirectToRoute(new { controller = "User", action = "Index" });
-		}
+            return RedirectToRoute(new { controller = "User", action = "Index" });
+        }
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		public async Task<IActionResult> ResetPassword(string token)
-		{
-			return View(new ResetPasswordViewModel { Token = token });
-		}
+        [ServiceFilter(typeof(LoginAuthorize))]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            string response = await _userService.ConfirmEmailAsync(userId, token);
+            return View("ConfirmEmail", response);
+        }
 
-		[ServiceFilter(typeof(LoginAuthorize))]
-		[HttpPost]
-		public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(resetPasswordViewModel);
-			}
 
-			ResetPasswordResponse response = await _userService.ResetPasswordAsync(resetPasswordViewModel);
-			if (response.HasError)
-			{
-				resetPasswordViewModel.HasError = response.HasError;
-				resetPasswordViewModel.Error = response.Error;
-				return View(resetPasswordViewModel);
-			}
+        [ServiceFilter(typeof(LoginAuthorize))]
+        public async Task<IActionResult> ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+        }
 
-			return RedirectToRoute(new
-			{
-				controller = "User", 
-				action = "Index"
-			});
-		}
+        [ServiceFilter(typeof(LoginAuthorize))]
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
 
-		public IActionResult AccessDenied()
-		{
-			return View();
-		}
-	}
+            var origin = Request.Headers["origin"];
+            ForgotPasswordResponse response = await _userService.ForgotPasswordAsync(vm, origin);
+            if (response.HasError)
+            {
+                vm.HasError = response.HasError;
+                vm.Error = response.Error;
+                return View(vm);
+            }
+            return RedirectToRoute(new { controller = "User", action = "Index" });
+        }
+
+        [ServiceFilter(typeof(LoginAuthorize))]
+        public async Task<IActionResult> ResetPassword(string token)
+        {
+            return View(new ResetPasswordViewModel { Token = token });
+        }
+
+        [ServiceFilter(typeof(LoginAuthorize))]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            ResetPasswordResponse response = await _userService.ResetPasswordAsync(vm);
+            if (response.HasError)
+            {
+                vm.HasError = response.HasError;
+                vm.Error = response.Error;
+                return View(vm);
+            }
+
+            return RedirectToRoute(new { controller = "User", action = "Index" });
+
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+    }
 }

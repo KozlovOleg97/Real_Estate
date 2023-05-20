@@ -10,6 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Presentation.WebApi.Controllers
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	[Route("api/[controller]")]
 	[ApiController]
     [SwaggerTag("Account Services")]
@@ -17,11 +20,20 @@ namespace Real_Estate.Presentation.WebApi.Controllers
 	{
 		private readonly IAccountService _accountService;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="accountService"></param>
 		public AccountController(IAccountService accountService)
 		{
 			_accountService = accountService;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns></returns>
 		[HttpPost("Authenticate")]
         [SwaggerOperation(
             Summary = "Login of User",
@@ -43,6 +55,11 @@ namespace Real_Estate.Presentation.WebApi.Controllers
             }
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="command"></param>
+		/// <returns></returns>
 		[HttpPost("RegisterAdminUser")]
         [SwaggerOperation(
             Summary = "Creating Administrator Role",
@@ -50,9 +67,21 @@ namespace Real_Estate.Presentation.WebApi.Controllers
         )]
         public async Task<IActionResult> RegisterAdminAsync(RegisterAdminUserCommand command)
 		{
-            return Ok(await Mediator.Send(command));
+            try
+            {
+                return Ok(await Mediator.Send(command));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="command"></param>
+		/// <returns></returns>
 		[HttpPost("RegisterDeveloperUser")]
         [SwaggerOperation(
             Summary = "Creating Developer Role",
@@ -60,7 +89,14 @@ namespace Real_Estate.Presentation.WebApi.Controllers
         )]
         public async Task<IActionResult> RegisterDeveloperAsync(RegisterDeveloperUserCommand command)
 		{
-            return Ok(await Mediator.Send(command));
+            try
+            {
+                return Ok(await Mediator.Send(command));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 	}
 }

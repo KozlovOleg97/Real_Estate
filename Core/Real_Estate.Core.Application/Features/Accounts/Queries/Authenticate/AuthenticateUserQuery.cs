@@ -44,7 +44,7 @@ namespace Real_Estate.Core.Application.Features.Accounts.Queries.Authenticate
                 foreach (var rol in response.Roles)
                 {
                     if (rol == "Agent" || rol == "Client") 
-                        throw new Exception("I don't have permission to use the web API.");
+                        throw new Exception("Don't have permission to use the web API.");
                 }
             }
             return response;

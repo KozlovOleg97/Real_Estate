@@ -6,9 +6,7 @@ namespace Real_Estate.Infrastructure.Persistence.Contexts
 {
     public class ApplicationContext : DbContext
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
-        {
-        }
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
         //public DbSet<Agents>? Agent { get; set; }
         public DbSet<Properties>? Properties { get; set; }

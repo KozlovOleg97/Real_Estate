@@ -7,10 +7,11 @@ using Real_Estate.Core.Application.Enums;
 using Real_Estate.Core.Application.Helpers;
 using Real_Estate.Core.Application.Interfaces.Services;
 using Real_Estate.Core.Application.ViewModels.Improvements;
+using System.Net.Mime;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class ImprovementsController : Controller
     {
         private readonly IImprovementsService _improvementsService;
@@ -54,7 +55,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string ImprovementName, string ImprovementDescription)
+        public async Task<IActionResult> Create(string Name, string Description)
         {
             if (currentlyUser.Roles.FirstOrDefault() == Roles.Agent.ToString())
             {
@@ -81,8 +82,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             SaveImprovementsViewModel improvementsSaveViewModel = new()
             {
-                Name = ImprovementName,
-                Description = ImprovementDescription
+                Name = Name,
+                Description = Description
             };
 
             await _improvementsService.Add(improvementsSaveViewModel);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Real_Estate.Core.Application.DTOs.Account;
 using Real_Estate.Core.Application.Enums;
@@ -10,9 +11,9 @@ using Real_Estate.Core.Application.ViewModels.Properties;
 using Real_Estate.Presentation.WebApp.Middlewares;
 using System.Runtime.CompilerServices;
 
-namespace Real_Estate.Presentation.WebApp.Controllers
+namespace RealEstateApp.Presentation.WebApp.Controllers
 {
-    [Authorize(Roles = "Agent")]
+    // [Authorize(Roles = "Agent")]
     public class AgentController : Controller
     {
         private readonly IPropertiesService _propertiesService;
@@ -24,10 +25,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
         private readonly ITypeOfSalesService _typeOfSalesService;
         private readonly IImprovementsService _improvementsService;
 
-        public AgentController(IPropertiesService propertiesService, IAccountService accountService, 
-            IHttpContextAccessor httpContextAccessor, IMapper mapper, 
-            ITypeOfPropertiesService typeOfPropertiesService, IImprovementsService improvementsService, 
-            ITypeOfSalesService typeOfSalesService)
+        public AgentController(IPropertiesService propertiesService, IAccountService accountService, IHttpContextAccessor httpContextAccessor, IMapper mapper, ITypeOfPropertiesService typeOfPropertiesService, IImprovementsService improvementsService, ITypeOfSalesService typeOfSalesService)
         {
             _propertiesService = propertiesService;
             _accountService = accountService;
@@ -38,6 +36,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             _improvementsService = improvementsService;
             _typeOfSalesService = typeOfSalesService;
         }
+
         public async Task<IActionResult> Index()
         {
             if (userviewModel.Roles.FirstOrDefault() == Roles.Admin.ToString())
@@ -57,16 +56,12 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             }
             ViewBag.TypeOfPropertiesList = await _typeOfPropertiesService.GetAllViewModel();
-
-            var properties = await _propertiesService.GetAllByAgentIdWithInclude(
-                userviewModel.Id);
-
+            var properties = await _propertiesService.GetAllByAgentIdWithInclude(userviewModel.Id);
             return View(properties);
         }
 
         [HttpPost]
-        public async Task<IActionResult> FiltersIndex(string? propertyCode, List<int>? propertyIds, 
-            decimal minPrice, decimal maxPrice, int bathroomsQuantity, int roomsQuantity)
+        public async Task<IActionResult> FiltersIndex(string? propertyCode, List<int>? propertyIds, decimal minPrice, decimal maxPrice, int bathroomsQuantity, int roomsQuantity)
         {
             FilterPropertiesViewModel filterPropertiesViewModel = new()
             {
@@ -79,9 +74,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             };
 
             var properties = await _propertiesService.GetAllWithFilters(filterPropertiesViewModel);
-
             ViewBag.TypeOfPropertiesList = await _typeOfPropertiesService.GetAllViewModel();
-
             return View("Index", properties);
         }
 
@@ -104,13 +97,11 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             }
             ViewBag.TypeOfPropertiesList = await _typeOfPropertiesService.GetAllViewModel();
-
             var properties = await _propertiesService.GetAllByAgentIdWithInclude(userviewModel.Id);
             return View(properties);
         }
 
-        public async Task<IActionResult> FiltersGetAll(string? propertyCode, List<int>? propertyIds, 
-            decimal minPrice, decimal maxPrice, int bathroomsQuantity, int roomsQuantity)
+        public async Task<IActionResult> FiltersGetAll(string? propertyCode, List<int>? propertyIds, decimal minPrice, decimal maxPrice, int bathroomsQuantity, int roomsQuantity)
         {
             FilterPropertiesViewModel filterPropertiesViewModel = new()
             {
@@ -123,9 +114,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             };
 
             var properties = await _propertiesService.GetAllWithFilters(filterPropertiesViewModel);
-
             ViewBag.TypeOfPropertiesList = await _typeOfPropertiesService.GetAllViewModel();
-
             return View("GetAll", properties);
         }
 
@@ -187,8 +176,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             vm.TypeOfSales = await _typeOfSalesService.GetAllViewModel();
             vm.Improvements = await _improvementsService.GetAllViewModel();
 
-            vm.AgentId = userviewModel.Id;
 
+            vm.AgentId = userviewModel.Id;
             vm.Code = CodeGenerator.PropertyCodeGenerator();
 
             List<ImprovementsViewModel> improvementsList = new List<ImprovementsViewModel>();
@@ -202,38 +191,33 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             if (savePropertiesVmAdded != null && savePropertiesVmAdded.Id != 0)
             {
-                savePropertiesVmAdded.ImagePathOne = UploadImagesHelper.UploadPropertyImage(
-                    vm.ImageFileOne, savePropertiesVmAdded.Id);
+                savePropertiesVmAdded.ImagePathOne = UploadImagesHelper.UploadPropertyImage(vm.ImageFileOne, savePropertiesVmAdded.Id);
 
                 if (vm.ImageFileTwo != null)
                 {
-                    savePropertiesVmAdded.ImagePathTwo = UploadImagesHelper.UploadPropertyImage(
-                        vm.ImageFileTwo, savePropertiesVmAdded.Id);
+                    savePropertiesVmAdded.ImagePathTwo = UploadImagesHelper.UploadPropertyImage(vm.ImageFileTwo, savePropertiesVmAdded.Id);
                 }
 
                 else if (vm.ImageFileThree != null)
                 {
-                    savePropertiesVmAdded.ImagePathThree = UploadImagesHelper.UploadPropertyImage(
-                        vm.ImageFileThree, savePropertiesVmAdded.Id);
+                    savePropertiesVmAdded.ImagePathThree = UploadImagesHelper.UploadPropertyImage(vm.ImageFileThree, savePropertiesVmAdded.Id);
 
                 }
 
                 else if (vm.ImageFileFour != null)
                 {
-                    savePropertiesVmAdded.ImagePathFour = UploadImagesHelper.UploadPropertyImage(
-                        vm.ImageFileFour, savePropertiesVmAdded.Id);
+                    savePropertiesVmAdded.ImagePathFour = UploadImagesHelper.UploadPropertyImage(vm.ImageFileFour, savePropertiesVmAdded.Id);
                 }
             }
 
+
             savePropertiesVmAdded.Improvements = improvementsList;
-
             await _propertiesService.AddImprovementsAsync(savePropertiesVmAdded);
-
             await _propertiesService.Update(savePropertiesVmAdded, savePropertiesVmAdded.Id);
-
             return RedirectToRoute(new { controller = "Agent", action = "GetAll" });
 
         }
+
         public async Task<IActionResult> Edit(int id)
         {
             if (userviewModel.Roles.FirstOrDefault() == Roles.Admin.ToString())
@@ -254,13 +238,9 @@ namespace Real_Estate.Presentation.WebApp.Controllers
             }
 
             var vm = await _propertiesService.GetByIdWithInclude(id);
-
             vm.TypeOfProperties = await _typeOfPropertiesService.GetAllViewModel();
             vm.TypeOfSales = await _typeOfSalesService.GetAllViewModel();
-           
-
             var allImprovements = await _improvementsService.GetAllViewModel();
-
             List<ImprovementsViewModel> allImprovementsList = new List<ImprovementsViewModel>();
 
             foreach (var item in allImprovements)
@@ -272,15 +252,17 @@ namespace Real_Estate.Presentation.WebApp.Controllers
                         item.IsChecked = true;
                         allImprovementsList.Add(item);
                     }
+
                     else
                     {
                         allImprovementsList.Add(item);
 
                     }
+
                 }
             }
-
             ViewBag.AllImprovements = allImprovementsList.Distinct().ToList();
+
 
             return View("SaveProperty", vm);
         }
@@ -326,7 +308,9 @@ namespace Real_Estate.Presentation.WebApp.Controllers
                         else
                         {
                             allImprovementsList.Add(item);
+
                         }
+
                     }
                 }
                 ViewBag.AllImprovements = allImprovementsList.Distinct().ToList();
@@ -429,6 +413,7 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             }
 
+
             return View(await _propertiesService.GetByIdWithInclude(id));
         }
 
@@ -452,13 +437,14 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             }
 
+
             await _propertiesService.Delete(id);
-
             UploadImagesHelper.DeletePropertyImage(id);
-
             await _propertiesService.DeleteImprovementsToProperties(id);
             return RedirectToRoute(new { controller = "Agent", action = "GetAll" });
         }
+
+
 
         public async Task<IActionResult> MyProfile()
         {
@@ -479,8 +465,8 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             }
 
-            return View("UpdateAgentProfile", await _propertiesService.GetAgentUserByUserNameAsync(
-                userviewModel.UserName));
+
+            return View("UpdateAgentProfile", await _propertiesService.GetAgentUserByUserNameAsync(userviewModel.UserName));
         }
 
         [HttpPost]
@@ -503,42 +489,43 @@ namespace Real_Estate.Presentation.WebApp.Controllers
 
             }
 
+
             if (!ModelState.IsValid)
             {
-                return View("UpdateAgentProfile", await _propertiesService.GetAgentUserByUserNameAsync(
-                    userviewModel.UserName));
+                return View("UpdateAgentProfile", await _propertiesService.GetAgentUserByUserNameAsync(userviewModel.UserName));
 
             }
 
-            SaveAgentProfileViewModel agentProfile = await _propertiesService.GetAgentUserByUserNameAsync(
-                userviewModel.UserName);
+            SaveAgentProfileViewModel agentProfile = await _propertiesService.GetAgentUserByUserNameAsync(userviewModel.UserName);
 
             if (agentProfileViewModel.File != null)
             {
                 if (agentProfile.ImagePath == null || agentProfile.ImagePath == "")
                 {
-                    agentProfileViewModel.ImagePath = UploadImagesHelper.UploadAgentUserImage(
-                        agentProfileViewModel.File, userviewModel.UserName);
+                    agentProfileViewModel.ImagePath = UploadImagesHelper.UploadAgentUserImage(agentProfileViewModel.File, userviewModel.UserName);
                 }
 
                 else if (agentProfile.ImagePath != null && agentProfile.ImagePath != "")
                 {
-                    agentProfileViewModel.ImagePath = UploadImagesHelper.UploadAgentUserImage(
-                        agentProfileViewModel.File, userviewModel.UserName, true, agentProfile.ImagePath);
+                    agentProfileViewModel.ImagePath = UploadImagesHelper.UploadAgentUserImage(agentProfileViewModel.File, userviewModel.UserName, true, agentProfile.ImagePath);
                 }
             }
 
-            var result = await _propertiesService.UpdateAgentProfile(
-                agentProfileViewModel);
+            var result = await _propertiesService.UpdateAgentProfile(agentProfileViewModel);
 
             if (result.HasError)
             {
-                return View("UpdateAgentProfile", await _propertiesService.GetAgentUserByUserNameAsync(
-                    userviewModel.UserName));
+                return View("UpdateAgentProfile", await _propertiesService.GetAgentUserByUserNameAsync(userviewModel.UserName));
             }
+
+
 
             return RedirectToRoute(new { controller = "Agent", action = "Index" });
 
         }
+
+
+
+
     }
 }

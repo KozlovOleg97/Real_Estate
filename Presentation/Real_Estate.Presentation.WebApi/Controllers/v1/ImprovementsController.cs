@@ -13,12 +13,19 @@ using System.Net.Mime;
 
 namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
     [SwaggerTag("Supporting of improvements")]
     public class ImprovementsController : BaseApiController
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet]
         [SwaggerOperation(
@@ -43,6 +50,11 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet("{id}")]
         [SwaggerOperation(
@@ -67,10 +79,15 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(
-            Summary = "Create imrovement",
+            Summary = "Create improvement",
             Description = "Receive the necessary parameters to create a new improvement."
         )]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -90,6 +107,12 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(
@@ -122,6 +145,11 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(

@@ -9,7 +9,7 @@ using Real_Estate.Core.Application.ViewModels.Properties;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
-    [Authorize(Roles = "Client")]
+    //[Authorize(Roles = "Client")]
     public class ClientController : Controller
     {
         private readonly IPropertiesService _propertiesService;

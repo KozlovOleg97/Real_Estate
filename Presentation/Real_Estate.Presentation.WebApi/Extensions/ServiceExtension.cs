@@ -4,30 +4,39 @@ using System.Reflection;
 
 namespace Real_Estate.Presentation.WebApi.Extensions
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public static class ServiceExtension
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="services"></param>
 		public static void AddSwaggerExtension(this IServiceCollection services)
 		{
 			services.AddSwaggerGen(options =>
-			{
-				List<string> xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", searchOption:
-					SearchOption.TopDirectoryOnly).ToList();
-				xmlFiles.ForEach(xmlFile =>
-
-					options.IncludeXmlComments(xmlFile));
+            {
+				List<string> xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, 
+                    "*.xml", searchOption: SearchOption.TopDirectoryOnly).ToList();
+				xmlFiles.ForEach(xmlFile => options.IncludeXmlComments(xmlFile));
 
 				options.SwaggerDoc("v1", new OpenApiInfo
 				{
 					Version = "v1",
-					Title = "RealEstate API",
+					Title = "RealsEstate API",
 					Description = "This Api will be responsible for overall data distribution",
 					Contact = new OpenApiContact
 					{
-						Name = "Oleg",
-						Email = "oleg.teachmeskills@gmail.com",
+						Name = "Group #5",
+						Email = "g.teachmeskills@gmail.com",
 						Url = new Uri("https://Easily.com")
 					}
 				});
+
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
 
                 options.EnableAnnotations();
                 options.DescribeAllParametersInCamelCase();
@@ -62,6 +71,10 @@ namespace Real_Estate.Presentation.WebApi.Extensions
 			});
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="services"></param>
 		public static void AddApiVersioningExtension(this IServiceCollection services)
 		{
 			services.AddApiVersioning(config =>

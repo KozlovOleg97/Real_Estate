@@ -10,7 +10,7 @@ using Real_Estate.Core.Application.ViewModels.TypeOfSales;
 
 namespace Real_Estate.Presentation.WebApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class TypeOfSalesController : Controller
     {
         private readonly ITypeOfSalesService _typeOfSalesService;

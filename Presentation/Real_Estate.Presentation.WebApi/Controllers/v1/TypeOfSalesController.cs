@@ -15,12 +15,19 @@ using System.Net.Mime;
 
 namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
     [SwaggerTag("Supporting of TypeSales")]
     public class TypeOfSalesController : BaseApiController
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet]
         [SwaggerOperation(

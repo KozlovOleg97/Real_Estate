@@ -4,8 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>RealEstate Api.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,5 +26,10 @@
     <ProjectReference Include="..\..\Infrastructure\Real_Estate.Infrastructure.Persistence\Real_Estate.Infrastructure.Persistence.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Real_Estate.Infrastructure.Shared\Real_Estate.Infrastructure.Shared.csproj" />
   </ItemGroup>
+
+	<PropertyGroup>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
 
 </Project>

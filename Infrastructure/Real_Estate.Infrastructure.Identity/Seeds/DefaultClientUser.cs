@@ -25,14 +25,14 @@ namespace Real_Estate.Infrastructure.Identity.Seeds
 				PhoneNumberConfirmed = true
 			};
 
-			if (userManager.Users.All(userClient => userClient.Id != defaultClient.Email))
+			if (userManager.Users.All(userClient => userClient.Id != defaultClient.Id))
 			{
 				var user = await userManager.FindByEmailAsync(defaultClient.Email);
 
 				if (user == null)
 				{
 					await userManager.CreateAsync(defaultClient, "SimplePa$$word12345");
-					await userManager.AddToRoleAsync(defaultClient, Roles.Admin.ToString());
+					await userManager.AddToRoleAsync(defaultClient, Roles.Client.ToString());
 				}
 			}
 		}

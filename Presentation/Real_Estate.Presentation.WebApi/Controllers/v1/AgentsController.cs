@@ -10,12 +10,19 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     [SwaggerTag("Agent Consultation")]
     public class AgentsController : BaseApiController
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet]
         [SwaggerOperation(
@@ -37,6 +44,11 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet("{id}")]
         [SwaggerOperation(
@@ -59,6 +71,11 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "RequireOnlyAdminAndDeveloper")]
         [HttpGet("{id}")]
         [SwaggerOperation(
@@ -83,6 +100,11 @@ namespace Real_Estate.Presentation.WebApi.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(

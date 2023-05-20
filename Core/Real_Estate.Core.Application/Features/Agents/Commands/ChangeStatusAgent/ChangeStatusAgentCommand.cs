@@ -7,7 +7,7 @@ namespace Real_Estate.Core.Application.Features.Agents.Commands.ChangeStatusAgen
 {
     public class ChangeStatusAgentCommand : IRequest<bool>
     {
-        [SwaggerParameter(Description = "The agent's ID")]
+        [SwaggerParameter(Description = "The agent's Id")]
         public string Id { get; set; }
 
         [SwaggerParameter(Description = "The status is changed")]

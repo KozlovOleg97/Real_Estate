@@ -12,6 +12,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Real_Estate.Presentation.WebApi.Controllers.v1
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
